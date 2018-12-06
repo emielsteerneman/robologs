@@ -53,30 +53,62 @@ void GameStateTracker::processVision(const SSL_DetectionFrame& packet){
 
     std::cout << "Blue robots = " << packet.robots_blue_size() << ", Yellow robots = " <<packet.robots_yellow_size() << std::endl;
 
+    typedef google::protobuf::RepeatedPtrField<SSL_DetectionRobot> packetBots_t;
+    typedef std::vector<Robot>* worldBots_t;
+    typedef std::pair<packetBots_t, worldBots_t> packetWorldPair_t;
 
-    std::vector<std::tuple<google::protobuf::RepeatedPtrField<SSL_DetectionRobot>&, std::vector<Robot>&>> SSL_botToGamestateBot;
-//    SSL_botToGamestateBot.emplace_back(packet.robots_yellow(),  gameState.yellow.robots);
-//    SSL_botToGamestateBot.emplace_back(packet.robots_blue(),  gameState.blue.robots);
+    std::vector<packetWorldPair_t> packetWorldPairs;
 
-    // Update all robots of yellow team
-    for(SSL_DetectionRobot SSL_bot : packet.robots_yellow()){
+    packetWorldPairs.emplace_back(std::make_pair(packet.robots_yellow(),  &gameState.yellow.robots));
+    packetWorldPairs.emplace_back(std::make_pair(packet.robots_blue(),  &gameState.blue.robots));
 
-        std::vector<Robot>& bots = gameState.yellow.robots;
+//    // Update all robots of yellow team
+//    for(SSL_DetectionRobot packetBot : packet.robots_yellow()){
+//
+//        std::vector<Robot>& bots = gameState.yellow.robots;
+//        Robot* bot = nullptr;
+//
+//        for(Robot r : bots)
+//            if(r.id == packetBot.robot_id())
+//                bot = &r;
+//
+//        if(bot == nullptr) {
+//            std::cout << "[GST] Adding new robot with id " << std::to_string(packetBot.robot_id()) << std::endl;
+//            bots.emplace_back(Robot());
+//            bot = &bots.back();
+//        }else{
+//            std::cout << "[GST] Found robot with id " << std::to_string(packetBot.robot_id()) << std::endl;
+//        }
+//
+//        bot->id = packetBot.robot_id();
+//    }
+
+    packetBots_t packetBots;
+    worldBots_t worldBots;
+
+    for(auto combo : packetWorldPairs){
+        std::cout << "[GST] working in pairs" << std::endl;
+        std::tie(packetBots, worldBots) = combo;
+
         Robot* bot = nullptr;
 
-        for(Robot r : bots)
-            if(r.id == SSL_bot.robot_id())
-                bot = &r;
+        for(SSL_DetectionRobot packetBot : packetBots){
+            std::cout << "[GST] Checking robot with id " << std::to_string(packetBot.robot_id()) << std::endl;
 
-        if(bot == nullptr) {
-            std::cout << "[GST] Adding new robot with id " << std::to_string(SSL_bot.robot_id()) << std::endl;
-            bots.emplace_back(Robot());
-            bot = &bots.back();
-        }else{
-            std::cout << "[GST] Found robot with id " << std::to_string(SSL_bot.robot_id()) << std::endl;
+            for(Robot r : *worldBots)
+                if(r.id == packetBot.robot_id())
+                    bot = &r;
+
+            if(bot == nullptr) {
+                std::cout << "[GST] Adding new robot with id " << std::to_string(packetBot.robot_id()) << std::endl;
+                worldBots->emplace_back(Robot());
+                bot = &worldBots->back();
+            }else{
+                std::cout << "[GST]     Found robot with id " << std::to_string(packetBot.robot_id()) << std::endl;
+            }
+
+            bot->id = packetBot.robot_id();
         }
-
-        bot->id = SSL_bot.robot_id();
     }
 
     recorded++;
