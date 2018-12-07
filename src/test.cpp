@@ -14,10 +14,10 @@ int main(){
     Reader reader;
     reader.openFile(filename);
 
-    GameStateTracker tracker;
+    GameStateTracker tracker(30);
     tracker.setReader(&reader);
 
-    for(int i = 0; i < 30000; i++){
+    for(int i = 0; i < 300; i++){
         tracker.tick();
     }
 

@@ -73,10 +73,13 @@ public:
     SSL_Referee refereePacket;
     GameState gameState;
 
+    int hz; // Hz at which the game should update
+    bool isFresh; // Checks if this is the first GameState
+
     int skipped = 0;
     int recorded = 0;
 
-    GameStateTracker();
+    GameStateTracker(int hz);
     ~GameStateTracker();
     void setReader(Reader* reader);
     void processVision(const SSL_DetectionFrame& packet);

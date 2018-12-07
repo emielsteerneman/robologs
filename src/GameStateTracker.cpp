@@ -7,7 +7,7 @@
 
 #include "GameStateTracker.h"
 
-GameStateTracker::GameStateTracker(){
+GameStateTracker::GameStateTracker(int hz) : hz(hz){
     std::cout << "[GST] Constructing new gameStateTracker" << std::endl;
 }
 
@@ -20,6 +20,11 @@ void GameStateTracker::setReader(Reader *reader) {
 }
 
 int GameStateTracker::tick() {
+    // Read packets until the next Hz, so to say
+    // Skip packets when state == SKIPPING. Only process referee packets
+    //      Set isFresh = true
+    //
+
     std::cout << std::endl << "[GST] Processing packet" << std::endl;
     // Read next packet
     int type = reader->next();
@@ -27,7 +32,11 @@ int GameStateTracker::tick() {
     if(type == MESSAGE_SSL_VISION_2010) {
         std::cout << "[GST] Vision packet read" << std::endl;
         if(wrapperPacket.ParseFromArray(reader->data, reader->dataHeader.messageSize)){
-            processVision(wrapperPacket.detection());
+            if(wrapperPacket.has_detection()){
+                processVision(wrapperPacket.detection());
+            }
+        }else{
+            std::cout << "[GST] Warning! Could not parse vision packet" << std::endl;
         }
     }
 
@@ -35,7 +44,7 @@ int GameStateTracker::tick() {
         if (refereePacket.ParseFromArray(reader->data, reader->dataHeader.messageSize)) {
             processReferee(refereePacket);
         } else {
-            std::cerr << "Error parsing vision packet!" << std::endl;
+            std::cout << "[GST] Warning! Could not parse referee packet" << std::endl;
         }
     }
 
@@ -59,29 +68,8 @@ void GameStateTracker::processVision(const SSL_DetectionFrame& packet){
 
     std::vector<packetWorldPair_t> packetWorldPairs;
 
-    packetWorldPairs.emplace_back(std::make_pair(packet.robots_yellow(),  &gameState.yellow.robots));
-    packetWorldPairs.emplace_back(std::make_pair(packet.robots_blue(),  &gameState.blue.robots));
-
-//    // Update all robots of yellow team
-//    for(SSL_DetectionRobot packetBot : packet.robots_yellow()){
-//
-//        std::vector<Robot>& bots = gameState.yellow.robots;
-//        Robot* bot = nullptr;
-//
-//        for(Robot r : bots)
-//            if(r.id == packetBot.robot_id())
-//                bot = &r;
-//
-//        if(bot == nullptr) {
-//            std::cout << "[GST] Adding new robot with id " << std::to_string(packetBot.robot_id()) << std::endl;
-//            bots.emplace_back(Robot());
-//            bot = &bots.back();
-//        }else{
-//            std::cout << "[GST] Found robot with id " << std::to_string(packetBot.robot_id()) << std::endl;
-//        }
-//
-//        bot->id = packetBot.robot_id();
-//    }
+    packetWorldPairs.emplace_back(packet.robots_yellow(),  &gameState.yellow.robots);
+    packetWorldPairs.emplace_back(packet.robots_blue(),  &gameState.blue.robots);
 
     packetBots_t packetBots;
     worldBots_t worldBots;
@@ -95,10 +83,12 @@ void GameStateTracker::processVision(const SSL_DetectionFrame& packet){
         for(SSL_DetectionRobot packetBot : packetBots){
             std::cout << "[GST] Checking robot with id " << std::to_string(packetBot.robot_id()) << std::endl;
 
+            // Find packetBot in worldBots
             for(Robot r : *worldBots)
                 if(r.id == packetBot.robot_id())
                     bot = &r;
 
+            // packetBot not yet in worldBots, add it
             if(bot == nullptr) {
                 std::cout << "[GST] Adding new robot with id " << std::to_string(packetBot.robot_id()) << std::endl;
                 worldBots->emplace_back(Robot());
@@ -107,7 +97,12 @@ void GameStateTracker::processVision(const SSL_DetectionFrame& packet){
                 std::cout << "[GST]     Found robot with id " << std::to_string(packetBot.robot_id()) << std::endl;
             }
 
+            // Update worldBot with data from packetBot
             bot->id = packetBot.robot_id();
+            bot->x = packetBot.x();
+            bot->y = packetBot.y();
+            bot->rot = packetBot.orientation();
+
         }
     }
 
