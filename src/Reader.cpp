@@ -23,20 +23,58 @@ Reader::~Reader() {
     std::cout << "[Reader] Destructing reader" << std::endl;
 }
 
-void Reader::openFile(std::string filename) {
+bool Reader::openFile(std::string filename) {
     this->filename = filename;
 
     // Open file for reading
     in = std::ifstream(filename, std::ios_base::in | std::ios_base::binary);
-    if (!in.is_open())
+    if (!in.is_open()) {
         std::cerr << "[Reader] Error opening log file \"" << filename << "\"!" << std::endl;
+        return false;
+    }
     std::cout << "[Reader] file opened : " << filename << std::endl;
 
+    readHeader();
+    return true;
+}
+
+void Reader::readHeader(){
     // Read header of file
     in.read((char*) &this->fileHeader, sizeof(this->fileHeader));
     // Log data is stored big endian, convert to host byte order
     fileHeader.version = be32toh(fileHeader.version);
     std::cout << "[Reader] File format version " << fileHeader.version << " detected." << std::endl;
+}
+
+bool Reader::isOpen(){
+    return in.is_open();
+}
+
+bool Reader::isEof(){
+    return in.is_open() && in.eof();
+}
+
+const char* Reader::getData(){
+    return data;
+}
+
+const DataHeader& Reader::getDataHeader(){
+    return dataHeader;
+}
+
+const FileHeader& Reader::getFileHeader(){
+    return fileHeader;
+}
+
+void Reader::reset(){
+    if(!in.is_open())
+        return;
+
+    in.clear();
+    in.seekg(0, std::ios::beg);
+    readHeader();
+
+    read = 0;
 }
 
 int Reader::next(){
@@ -59,5 +97,6 @@ int Reader::next(){
     data = new char[dataHeader.messageSize];
     in.read(data, dataHeader.messageSize);
 
+    read++;
     return dataHeader.messageType;
 }

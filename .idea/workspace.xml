@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BookmarkManager">
+    <bookmark url="file://$PROJECT_DIR$/src/GameStateTracker.h" line="11" mnemonic="3" />
+    <bookmark url="file://$PROJECT_DIR$/src/test.cpp" line="35" mnemonic="0" />
+  </component>
   <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
     <generated>
-      <config projectName="ssl-logtools" targetName="test" />
-      <config projectName="ssl-logtools" targetName="protobuf" />
+      <config projectName="robologs" targetName="tester" />
+      <config projectName="robologs" targetName="protobuf" />
     </generated>
   </component>
   <component name="CMakeSettings" AUTO_RELOAD="true">
@@ -13,9 +17,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fecc2595-a4b9-4f11-ac19-9b13a19d8895" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/Drawer.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Drawer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/CMakeLists.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/GameStateTracker.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameStateTracker.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/GameStateTracker.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameStateTracker.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Reader.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Reader.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Reader.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/Reader.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/test.cpp" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
@@ -25,38 +37,39 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
+  </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="FavoritesManager">
     <favorites_list name="ssl-logtools" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/GameStateTracker.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="375">
-              <caret line="25" column="7" selection-start-line="25" selection-start-column="7" selection-end-line="25" selection-end-column="7" />
+            <state relative-caret-position="339">
+              <caret line="292" selection-start-line="292" selection-end-line="294" />
               <folding>
                 <element signature="e#39#57#0" expanded="true" />
+                <element signature="e#181#340#0" />
+                <element signature="e#342#450#0" />
+                <element signature="e#452#531#0" />
+                <element signature="e#3668#8178#0" />
+                <element signature="e#8245#8743#0" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/protobuf/messages_robocup_ssl_geometry.proto">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="375">
-              <caret line="25" column="29" lean-forward="true" selection-start-line="25" selection-start-column="29" selection-end-line="25" selection-end-column="29" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/protobuf/messages_robocup_ssl_detection.proto">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="18" column="35" selection-start-line="18" selection-start-column="35" selection-end-line="18" selection-end-column="35" />
             </state>
           </provider>
         </entry>
@@ -64,13 +77,40 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/GameStateTracker.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="350">
-              <caret line="72" column="30" lean-forward="true" selection-start-line="72" selection-start-column="30" selection-end-line="72" selection-end-column="30" />
+            <state relative-caret-position="66">
+              <caret line="101" column="7" selection-start-line="101" selection-start-column="7" selection-end-line="101" selection-end-column="7" />
               <folding>
-                <element signature="e#120#139#0" expanded="true" />
-                <element signature="e#549#692#1" />
-                <element signature="e#695#791#1" />
-                <element signature="e#794#877#1" />
+                <element signature="e#152#171#0" expanded="true" />
+                <element signature="e#382#1073#1" />
+                <element signature="e#348#492#1" />
+                <element signature="e#495#591#1" />
+                <element signature="e#594#677#1" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/Drawer.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="345">
+              <caret line="115" column="61" selection-start-line="115" selection-start-column="61" selection-end-line="115" selection-end-column="61" />
+              <folding>
+                <element signature="e#39#58#0" expanded="true" />
+                <element signature="e#111#945#0" />
+                <element signature="e#947#1612#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Drawer.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="249">
+              <caret line="26" selection-start-line="26" selection-end-line="26" />
+              <folding>
+                <element signature="e#92#121#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -79,10 +119,35 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="19" column="24" selection-start-line="19" selection-start-column="24" selection-end-line="19" selection-end-column="24" />
+            <state relative-caret-position="240">
+              <caret line="22" column="34" lean-forward="true" selection-start-line="22" selection-start-column="34" selection-end-line="22" selection-end-column="34" />
               <folding>
                 <element signature="e#39#58#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Reader.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="299">
+              <caret line="83" column="5" selection-start-line="83" selection-start-column="5" selection-end-line="83" selection-end-column="5" />
+              <folding>
+                <element signature="e#1445#1512#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Reader.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="300">
+              <caret line="41" selection-start-line="41" selection-end-line="41" />
+              <folding>
+                <element signature="e#100#136#0" expanded="true" />
+                <element signature="e#211#324#1" />
               </folding>
             </state>
           </provider>
@@ -107,6 +172,12 @@
       <find>in;</find>
       <find>in(</find>
       <find>main</find>
+      <find>preci</find>
+      <find>precision</find>
+      <find>Game</find>
+      <find>filename</find>
+      <find>setpr</find>
+      <find>fix</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -120,7 +191,6 @@
         <option value="$PROJECT_DIR$/src/common/logfile.cpp" />
         <option value="$PROJECT_DIR$/src/logplayer/player.cpp" />
         <option value="$PROJECT_DIR$/src/protobuf/ssl_referee.proto" />
-        <option value="$PROJECT_DIR$/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/src/GameStateTracker/GameStateTracker.h" />
         <option value="$PROJECT_DIR$/src/GameStateTracker/GameStateTracker.cpp" />
         <option value="$PROJECT_DIR$/src/examples/examplereader.cpp" />
@@ -130,51 +200,46 @@
         <option value="$PROJECT_DIR$/src/gameStateTracker/GameStateTracker.cpp" />
         <option value="$PROJECT_DIR$/src/gameStateTracker/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/src/examples/CMakeLists.txt" />
+        <option value="$PROJECT_DIR$/src/protobuf/messages_robocup_ssl_detection.proto" />
         <option value="$PROJECT_DIR$/src/CMakeLists.txt" />
+        <option value="$PROJECT_DIR$/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/src/Reader.cpp" />
         <option value="$PROJECT_DIR$/src/Reader.h" />
         <option value="$PROJECT_DIR$/src/GameStateTracker.h" />
-        <option value="$PROJECT_DIR$/src/test.cpp" />
-        <option value="$PROJECT_DIR$/src/protobuf/messages_robocup_ssl_detection.proto" />
         <option value="$PROJECT_DIR$/src/GameStateTracker.cpp" />
+        <option value="$PROJECT_DIR$/src/Drawer.h" />
+        <option value="$PROJECT_DIR$/src/test.cpp" />
+        <option value="$PROJECT_DIR$/src/Drawer.cpp" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="y" value="25" />
-    <option name="width" value="1920" />
-    <option name="height" value="1018" />
+    <option name="x" value="-193" />
+    <option name="y" value="1272" />
+    <option name="width" value="1910" />
+    <option name="height" value="782" />
   </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
-              <item name="ssl-logtools" type="b2602c69:ProjectViewProjectNode" />
+              <item name="robologs" type="b2602c69:ProjectViewProjectNode" />
               <item name="robologs" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="ssl-logtools" type="b2602c69:ProjectViewProjectNode" />
-              <item name="robologs" type="462c0819:PsiDirectoryNode" />
-              <item name="cmake-build-debug" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ssl-logtools" type="b2602c69:ProjectViewProjectNode" />
-              <item name="robologs" type="462c0819:PsiDirectoryNode" />
-              <item name="cmake-build-debug" type="462c0819:PsiDirectoryNode" />
-              <item name="bin" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ssl-logtools" type="b2602c69:ProjectViewProjectNode" />
+              <item name="robologs" type="b2602c69:ProjectViewProjectNode" />
               <item name="robologs" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="ssl-logtools" type="b2602c69:ProjectViewProjectNode" />
+              <item name="robologs" type="b2602c69:ProjectViewProjectNode" />
               <item name="robologs" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="protobuf" type="462c0819:PsiDirectoryNode" />
@@ -183,7 +248,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -191,7 +255,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="CMakeSettings" />
+    <property name="settings.editor.selected.configurable" value="dynamic.analysis.tools.valgrind" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -214,19 +278,19 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.test">
-    <configuration name="protobuf" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="ssl-logtools" TARGET_NAME="protobuf" CONFIG_NAME="Debug">
+  <component name="RunManager" selected="Application.tester">
+    <configuration name="protobuf" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="robologs" TARGET_NAME="protobuf" CONFIG_NAME="Debug">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration name="test" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="ssl-logtools" TARGET_NAME="test" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="ssl-logtools" RUN_TARGET_NAME="test">
+    <configuration name="tester" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="robologs" TARGET_NAME="tester" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="robologs" RUN_TARGET_NAME="tester">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
     <list>
-      <item itemvalue="Application.test" />
+      <item itemvalue="Application.tester" />
       <item itemvalue="Application.protobuf" />
     </list>
   </component>
@@ -249,17 +313,22 @@
       <workItem from="1544087563376" duration="1532000" />
       <workItem from="1544101351704" duration="9614000" />
       <workItem from="1544181552836" duration="4083000" />
+      <workItem from="1544234603477" duration="32126000" />
+      <workItem from="1544365405967" duration="4769000" />
+      <workItem from="1544377749354" duration="4744000" />
+      <workItem from="1544431423222" duration="3263000" />
+      <workItem from="1544453548898" duration="24050000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="66702000" />
+    <option name="totallyTimeSpent" value="144547000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="25" width="1920" height="1018" extended-state="6" />
+    <frame x="0" y="1105" width="1920" height="1018" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.74388254" visible="true" weight="0.20490928" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.74388254" visible="true" weight="0.15688367" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" sideWeight="0.25611746" side_tool="true" weight="0.024012808" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -269,36 +338,20 @@
       <window_info anchor="bottom" id="Inspection" order="4" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="5" />
       <window_info anchor="bottom" id="Database Changes" order="6" />
-      <window_info anchor="bottom" id="Terminal" order="7" weight="0.060742408" />
-      <window_info anchor="bottom" id="Event Log" order="8" side_tool="true" />
+      <window_info anchor="bottom" id="Terminal" order="7" weight="0.28908888" />
+      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.50053364" side_tool="true" weight="0.31946006" />
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.3295838" />
       <window_info anchor="bottom" id="CMake" order="10" weight="0.38807648" />
-      <window_info anchor="bottom" id="Messages" order="11" weight="0.3104612" />
+      <window_info anchor="bottom" id="Messages" order="11" sideWeight="0.4994664" visible="true" weight="0.39145106" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Database" order="3" />
-      <window_info anchor="right" id="Run" order="4" visible="true" weight="0.28335112" />
+      <window_info anchor="right" id="Database" order="3" weight="0.32977587" />
+      <window_info anchor="right" id="Run" order="4" weight="0.36125934" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/src/Reader.h</url>
-          <line>18</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/src/test.cpp</url>
-          <line>25</line>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/common/recorder.cpp">
@@ -404,13 +457,6 @@
     <entry file="file://$PROJECT_DIR$/src/qt/CMakeLists.txt">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="35" column="14" selection-start-line="35" selection-start-column="14" selection-end-line="35" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/common/CMakeLists.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="375">
@@ -424,13 +470,6 @@
     <entry file="file://$PROJECT_DIR$/src/gameStateTracker/CMakeLists.txt" />
     <entry file="file://$PROJECT_DIR$/src/protobuf/ssl_referee.cpp">
       <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/CMakeLists.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="14" selection-start-line="14" selection-end-line="14" />
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/protobuf/CMakeLists.txt">
       <provider selected="true" editor-type-id="text-editor">
@@ -463,13 +502,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/protobuf/ssl_referee.proto">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1755">
-          <caret line="117" column="34" selection-start-line="117" selection-start-column="34" selection-end-line="117" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/protobuf/messages_robocup_ssl_wrapper.proto">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
@@ -477,62 +509,48 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Reader.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="615">
-          <caret line="41" column="36" selection-start-line="41" selection-start-column="36" selection-end-line="41" selection-end-column="36" />
-          <folding>
-            <element signature="e#100#136#0" expanded="true" />
-            <element signature="e#211#324#1" />
-            <element signature="e#423#589#1" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Reader.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="810">
-          <caret line="54" column="49" selection-start-line="54" selection-start-column="49" selection-end-line="54" selection-end-column="49" />
-          <folding>
-            <element signature="e#39#75#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///usr/include/c++/7/bits/shared_ptr_base.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5625">
-          <caret line="375" selection-start-line="375" selection-end-line="375" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/GameStateTracker.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="350">
-          <caret line="72" column="30" lean-forward="true" selection-start-line="72" selection-start-column="30" selection-end-line="72" selection-end-column="30" />
+        <state relative-caret-position="327">
+          <caret line="343" column="36" lean-forward="true" selection-start-line="343" selection-start-column="36" selection-end-line="343" selection-end-column="36" />
           <folding>
-            <element signature="e#120#139#0" expanded="true" />
-            <element signature="e#549#692#1" />
-            <element signature="e#695#791#1" />
-            <element signature="e#794#877#1" />
+            <element signature="e#9631#9673#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test.cpp">
+    <entry file="file://$PROJECT_DIR$/opencv/installation/OpenCV-master/python/setup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cmake-build-debug/CMakeCache.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-22448" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/opencv/opencv/modules/core/src/matmul.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="1564" selection-start-line="1564" selection-end-line="1564" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="74" selection-start-line="6" selection-start-column="74" selection-end-line="6" selection-end-column="74" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/CMakeLists.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="285">
-          <caret line="19" column="24" selection-start-line="19" selection-start-column="24" selection-end-line="19" selection-end-column="24" />
-          <folding>
-            <element signature="e#39#58#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/protobuf/messages_robocup_ssl_detection.proto">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="18" column="35" selection-start-line="18" selection-start-column="35" selection-end-line="18" selection-end-column="35" />
+          <caret line="19" selection-start-line="19" selection-end-line="19" />
         </state>
       </provider>
     </entry>
@@ -543,12 +561,98 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/protobuf/messages_robocup_ssl_detection.proto">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="465">
+          <caret line="31" column="1" selection-start-line="31" selection-start-column="1" selection-end-line="31" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/protobuf/ssl_referee.proto">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="384">
+          <caret line="128" column="41" selection-start-line="128" selection-start-column="41" selection-end-line="128" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Reader.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="41" selection-start-line="41" selection-end-line="41" />
+          <folding>
+            <element signature="e#100#136#0" expanded="true" />
+            <element signature="e#211#324#1" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/GameStateTracker.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="66">
+          <caret line="101" column="7" selection-start-line="101" selection-start-column="7" selection-end-line="101" selection-end-column="7" />
+          <folding>
+            <element signature="e#152#171#0" expanded="true" />
+            <element signature="e#382#1073#1" />
+            <element signature="e#348#492#1" />
+            <element signature="e#495#591#1" />
+            <element signature="e#594#677#1" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Reader.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="299">
+          <caret line="83" column="5" selection-start-line="83" selection-start-column="5" selection-end-line="83" selection-end-column="5" />
+          <folding>
+            <element signature="e#1445#1512#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/GameStateTracker.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="25" column="7" selection-start-line="25" selection-start-column="7" selection-end-line="25" selection-end-column="7" />
+        <state relative-caret-position="339">
+          <caret line="292" selection-start-line="292" selection-end-line="294" />
           <folding>
             <element signature="e#39#57#0" expanded="true" />
+            <element signature="e#181#340#0" />
+            <element signature="e#342#450#0" />
+            <element signature="e#452#531#0" />
+            <element signature="e#3668#8178#0" />
+            <element signature="e#8245#8743#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Drawer.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="249">
+          <caret line="26" selection-start-line="26" selection-end-line="26" />
+          <folding>
+            <element signature="e#92#121#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="22" column="34" lean-forward="true" selection-start-line="22" selection-start-column="34" selection-end-line="22" selection-end-column="34" />
+          <folding>
+            <element signature="e#39#58#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Drawer.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="115" column="61" selection-start-line="115" selection-start-column="61" selection-end-line="115" selection-end-column="61" />
+          <folding>
+            <element signature="e#39#58#0" expanded="true" />
+            <element signature="e#111#945#0" />
+            <element signature="e#947#1612#0" />
           </folding>
         </state>
       </provider>

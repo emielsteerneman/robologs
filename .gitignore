@@ -5,3 +5,7 @@ cmake-build-debug/
 .idea
 .idea/
 .idea/workspace.xml
+opencv/
+*.mp4
+opencv3/
+.idea/

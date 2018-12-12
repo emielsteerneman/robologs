@@ -31,20 +31,29 @@ enum MessageType
 };
 
 class Reader {
-public:
     std::string filename;
-    std::ifstream in;
     FileHeader fileHeader;
     DataHeader dataHeader;
-    char* data;
+    char* data = nullptr;
+    std::ifstream in;
 
-    unsigned long refereePackets = 0;
-    unsigned long visionPackets = 0;
+    void readHeader();
+
+public:
 
     Reader();
     ~Reader();
 
-    void openFile(std::string filename);
+    const char* getData();
+    const DataHeader& getDataHeader();
+    const FileHeader& getFileHeader();
+
+    int read = 0;
+
+    bool openFile(std::string filename);
+    bool isOpen();
+    bool isEof();
+    void reset();
     int next();
 };
 
