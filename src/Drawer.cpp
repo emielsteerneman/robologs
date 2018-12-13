@@ -123,7 +123,7 @@ Drawer::Drawer() {
     const std::string filename = "../../tiger_cmus_15_full_fast.mp4";
 //    if(!writer.open(filename, cv::VideoWriter::fourcc('H', '2', '6', '4'), 30.0, cv::Size(1920, 1080))){
 
-    if(!reader.open("../../2018-06-20_21-21_TIGERs_Mannheim-vs-CMμs.mp4")){
+    if(false || !reader.open("../../2018-06-20_21-21_TIGERs_Mannheim-vs-CMμs.mp4")){
         std::cout << "[Drawer] Warning! Could not open reader" << std::endl;
     }else{
         std::cout << "[Drawer] Reader opened" << std::endl;
@@ -222,9 +222,9 @@ void Drawer::drawGameState(const GameState& gameState){
 
     drawTimeline(img, gameState);
 
-    if(writeCounter++ % 3 == 0)
+//    if(writeCounter++ % 3 == 0)
         writer.write(img);
-    counter++;
+//    counter++;
 //    img = cv::Mat::zeros(height, width, CV_8UC3);
     img *= 0.9;
 }
