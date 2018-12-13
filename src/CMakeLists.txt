@@ -13,7 +13,7 @@ add_subdirectory(protobuf)
 
 #add_subdirectory(examples)
 
-add_executable(tester test.cpp GameStateTracker.cpp Reader.cpp Drawer.cpp)
+add_executable(tester test.cpp GameStateTracker.cpp Reader.cpp Drawer.cpp Writer.cpp Writer.h)
 target_link_libraries(tester protobuf ${OpenCV_LIBS})
 
 #add_executable(main ${SOURCES})

@@ -5,6 +5,7 @@
 #include "Reader.h"
 #include "GameStateTracker.h"
 #include "Drawer.h"
+#include "Writer.h"
 
 #include <iostream>
 #include <iomanip>
@@ -12,10 +13,12 @@
 
 int main(){
 
-    int fps = 15;
+    int fps = 60;
     int nStates = 1000;
 
     std::string filename = "../../2018-06-20_21-21_TIGERs_Mannheim-vs-CMμs.log";
+//    std::string filename = "../../2018-06-19_16-35_RoboDragons-vs-RoboTeam_Twente.log";
+
     Reader reader;
     reader.openFile(filename);
 
@@ -23,6 +26,8 @@ int main(){
     tracker.setReader(&reader);
 
     Drawer drawer;
+
+    Writer writer("../../log_tiger_cmus.json");
 
     tracker.addTimeline();
 
@@ -52,6 +57,11 @@ int main(){
     }
 
 
+    int robotCounter[20];
+    for(int i = 0; i < 20; i++){
+        robotCounter[i] = 0;
+    }
+
     /* Process */
     const std::chrono::steady_clock::time_point begin_real = std::chrono::steady_clock::now();
     const clock_t begin_cpu = clock();
@@ -60,7 +70,17 @@ int main(){
     int iStates = 0;
     for(iStates = 0; (nStates <= 0 || iStates < nStates) && !reader.isEof(); iStates++){
         tracker.tick();
-        drawer.drawGameState(tracker.gameState);
+        writer.write(tracker.gameState);
+
+        int totalRobots = tracker.gameState.yellow.robots.size() + tracker.gameState.blue.robots.size();
+        robotCounter[totalRobots]++;
+
+//        try{
+//            drawer.drawGameState(tracker.gameState);
+//        }catch(const std::exception& e){
+//            std::cout << "Drawer exception caught!" << std::endl;
+//            std::cout << e.what() << std::endl;
+//        }
     }
     const std::chrono::steady_clock::time_point end_real = std::chrono::steady_clock::now();
     const clock_t end_cpu = clock();
@@ -87,6 +107,16 @@ int main(){
     std::cout << "Packets / second in game = " << (tracker.parsed / total_time_recorded) << std::endl;
     std::cout << "Packets / state  = " << (tracker.parsed / (iStates + 1)) << std::endl;
     std::cout << "\nTerminating" << std::endl;
+
+    float total = 0;
+    for(int i = 0; i < 20; i++){
+        total += robotCounter[i];
+    }
+    std::cout << std::setprecision(2);
+    for(int i = 10; i < 20; i++){
+        float p = robotCounter[i] / total;
+        std::cout << i << " : " << p << std::endl;
+    }
 
 }
 

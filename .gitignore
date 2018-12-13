@@ -10,3 +10,6 @@ opencv/
 opencv3/
 .idea/
 .idea
+*.log
+*.json
+*.avi
