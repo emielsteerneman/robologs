@@ -16,11 +16,9 @@
 #include "Reader.h"
 
 Reader::Reader() {
-    std::cout << "[Reader] Constructing new reader" << std::endl;
 }
 
 Reader::~Reader() {
-    std::cout << "[Reader] Destructing reader" << std::endl;
 }
 
 bool Reader::openFile(std::string filename) {

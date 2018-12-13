@@ -109,22 +109,29 @@ void Drawer::drawTimeline(cv::Mat& img, const GameState& gameState){
     for(int i = 0; i < positions.size() - 2; i++){
         double x0 = (int)(positions.at(i) * 1920);
         double x1 = (int)(positions.at(i+1) * 1920);
-        cv::Rect rect(x0, y, x1-x0, y);
         cv::Point p1(x0, y);
         cv::Point p2(x1, y+10);
 
-        cv::rectangle(img, p1, p2, cv::Scalar(127 + 127*dy, 0, 127-127*dy), CV_FILLED);
+        cv::rectangle(img, p1, p2, cv::Scalar(127 + 127*dy, 0, 127-127*dy), cv::FILLED);
         dy *= -1;
     }
-
 }
 
 Drawer::Drawer() {
-    std::cout << "Constructing Drawer" << std::endl;
 //    const std::string filename = "../../video_out.avi";
 //    if(!writer.open(filename, cv::VideoWriter::fourcc('M', 'J', 'P', 'G'), 30.0, cv::Size(1920, 1080))){
     const std::string filename = "../../tiger_cmus_15_full_fast.mp4";
 //    if(!writer.open(filename, cv::VideoWriter::fourcc('H', '2', '6', '4'), 30.0, cv::Size(1920, 1080))){
+
+    if(!reader.open("../../2018-06-20_21-21_TIGERs_Mannheim-vs-CMμs.mp4")){
+        std::cout << "[Drawer] Warning! Could not open reader" << std::endl;
+    }else{
+        std::cout << "[Drawer] Reader opened" << std::endl;
+//        std::cout << "[Drawer] CAP_PROP_POS_MSEC = " << reader.get(cv::CAP_PROP_POS_MSEC) << std::endl;
+//        std::cout << "[Drawer] CAP_PROP_POS_FRAMES = " << reader.get(cv::CAP_PROP_POS_FRAMES) << std::endl;
+//        std::cout << "[Drawer] CAP_PROP_FRAME_WIDTH = " << reader.get(cv::CAP_PROP_FRAME_WIDTH) << std::endl;
+//        std::cout << "[Drawer] CAP_PROP_FRAME_HEIGHT = " << reader.get(cv::CAP_PROP_FRAME_HEIGHT) << std::endl;
+    }
     if(!writer.open(filename, cv::VideoWriter::fourcc('a', 'v', 'c', '1'), 30.0, cv::Size(1920, 1080))){
         std::cout << "[Drawer] Warning! Could not open writer" << std::endl;
     }
@@ -162,6 +169,13 @@ Drawer::Drawer() {
 void Drawer::drawGameState(const GameState& gameState){
 
 //    cv::Mat img = cv::Mat::zeros(height, width, CV_8UC3); // =(height, width, CV_8UC3)
+
+
+
+    if(reader.read(frame)){
+        cv::resize(frame, img, cv::Size(1920, 1080));
+        img /= 2;
+    }
 
     drawFieldOnImage(img);
 
@@ -208,7 +222,7 @@ void Drawer::drawGameState(const GameState& gameState){
 
     drawTimeline(img, gameState);
 
-    if(writeCounter++ % 30 == 0)
+    if(writeCounter++ % 3 == 0)
         writer.write(img);
     counter++;
 //    img = cv::Mat::zeros(height, width, CV_8UC3);

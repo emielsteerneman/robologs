@@ -11,10 +11,9 @@
 #include <chrono>
 
 int main(){
-    std::cout << "test.cpp main" << std::endl;
 
     int fps = 15;
-    int nStates = 2000;
+    int nStates = 1000;
 
     std::string filename = "../../2018-06-20_21-21_TIGERs_Mannheim-vs-CMμs.log";
     Reader reader;
@@ -29,6 +28,19 @@ int main(){
 
     /* Count total time recorded */
     double total_time_recorded = 0;
+    double total_duration_game = std::get<0>(tracker.gameState.timeline.back()) - std::get<0>(tracker.gameState.timeline.front());
+    std::string started_at;
+    std::string stopped_at;
+    {
+        char buff[32];
+        time_t time = (time_t)std::get<0>(tracker.gameState.timeline.front());
+        strftime(buff, 20, "%Y-%m-%d %H:%M:%S", localtime(&time));
+        started_at = std::string(buff);
+
+        time = (time_t)std::get<0>(tracker.gameState.timeline.back());
+        strftime(buff, 20, "%Y-%m-%d %H:%M:%S", localtime(&time));
+        stopped_at = std::string(buff);
+    }
     {
         double previous = std::get<0>(tracker.gameState.timeline.back());
         for (unsigned long i = tracker.gameState.timeline.size() - 1; 0 < i; i--) {
@@ -63,6 +75,9 @@ int main(){
     std::cout << std::setprecision(2) << std::fixed << std::endl;
     std::cout << "Duration real    = " << duration_real << std::endl;
     std::cout << "Duration CPU     = " << duration_cpu << std::endl;
+    std::cout << "Start of log     = " << started_at << std::endl;
+    std::cout << "End of log       = " << stopped_at << std::endl;
+    std::cout << "Duration of log  = " << total_duration_game << std::endl;
     std::cout << "Actual FPS       = " << fpsActual << std::endl;
     std::cout << "Accuracy FPS     = " << fpsAccuracy << "%" << std::endl;
     std::cout << "Packets expected = " << (nStates * 480/fps) << std::endl;

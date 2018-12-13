@@ -17,6 +17,9 @@ public:
     void drawGameState(const GameState& gameState);
     void drawTimeline(cv::Mat& img, const GameState& gameState);
 
+    std::string previousCommand;
+
+    cv::VideoCapture reader;
     cv::VideoWriter writer;
     int counter;
     int writeCounter = 0;
@@ -26,6 +29,7 @@ public:
     cv::Mat kernelOrange;
 
     cv::Mat img;
+    cv::Mat frame;
 
     const int width = 1920;
     const int height = 1080;
