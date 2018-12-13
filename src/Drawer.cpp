@@ -94,12 +94,12 @@ void Drawer::drawFieldOnImage(const cv::Mat& img){
 
 void Drawer::drawTimeline(cv::Mat& img, const GameState& gameState){
 
-    double duration = std::get<0>(gameState.timeline.back()) - std::get<0>(gameState.timeline.front());
-    double first = std::get<0>(gameState.timeline.front());
+    double duration = std::get<0>(gameState.gameInfo.timeline.back()) - std::get<0>(gameState.gameInfo.timeline.front());
+    double first = std::get<0>(gameState.gameInfo.timeline.front());
 
     std::vector<double> positions;
 
-    for(const auto& tup : gameState.timeline){
+    for(const auto& tup : gameState.gameInfo.timeline){
         double d = (std::get<0>(tup) - first) / duration;
         positions.emplace_back(d);
     }
@@ -138,7 +138,7 @@ Drawer::Drawer() {
 //        std::cout << "[Drawer] Warning! Could not open writer" << std::endl;
 //    }
 
-    const std::string filename = "../../tiger_cmus_15_full.mp4";
+    const std::string filename = "../../videos/tiger_cmus_15_full.mp4";
     if(!writer.open(filename, cv::VideoWriter::fourcc('a', 'v', 'c', '1'), 30.0, cv::Size(1920, 1080))){
         std::cout << "[Drawer] Warning! Could not open writer" << std::endl;
     }

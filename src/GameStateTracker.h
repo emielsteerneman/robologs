@@ -24,10 +24,10 @@ enum RecordingState {
 };
 
 class CircularBuffer {
-//    const int bufferSize = CIRCULAR_BUFFER_SIZE;
     int bufferAt = 0;
     int bufferTotal = 0;
     float buffer[CIRCULAR_BUFFER_SIZE];
+
 public:
     void put(float f){
         buffer[bufferAt] = f;
@@ -84,6 +84,20 @@ struct Team {
     std::vector<Robot> robots;
 };
 
+struct GameInfo {
+    double t_start;
+    double t_stop;
+    double t_duration;
+
+    std::vector<std::tuple<double, std::string, std::string, RecordingState >> timeline;
+    int nPackets;
+    int nPackets_referee;
+    int nPackets_vision;
+    int nPackets_geometry;
+    int nPackets_invalid;
+};
+
+
 struct GameState {
     bool isInitial;
     double timestamp;
@@ -95,29 +109,36 @@ struct GameState {
 //    std::vector<Ball> balls;
     Ball ball;
 
-    std::vector<std::tuple<double, std::string, std::string, RecordingState >> timeline;
+    GameInfo gameInfo;
 };
 
+
 class GameStateTracker {
-public:
-    Reader* reader;
-    RecordingState recordingState = RecordingState::RECORDING;
+
     SSL_WrapperPacket wrapperPacket;
     SSL_Referee refereePacket;
     GameState gameState;
 
     int hz; // Hz at which the game should update
-    double lastInterval;
+    double lastInterval = true; // Timestamp of the last interval. Used to provide consistent FPS
 
+public:
+
+    Reader* reader;
+    RecordingState recordingState = RecordingState::RECORDING;
     int parsed = 0;
 
     GameStateTracker(int hz);
-    ~GameStateTracker();
+
     void setReader(Reader* reader);
     void processVision(const SSL_DetectionFrame& packet);
     void processReferee(const SSL_Referee& packet);
     bool tick();
-    void addTimeline();
+
+    void addInfo();
+
+    const GameState& get();
+    const GameInfo& getInfo();
 };
 
 

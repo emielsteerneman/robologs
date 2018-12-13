@@ -1,6 +1,4 @@
-//
-// Created by emiel on 4-12-18.
-//
+
 
 #include <stdio.h>
 #include <iostream>
@@ -14,10 +12,6 @@
 GameStateTracker::GameStateTracker(int hz) : hz(hz){
     std::cout << "[GST] Constructing new gameStateTracker" << std::endl;
     gameState.isInitial = true;
-}
-
-GameStateTracker::~GameStateTracker(){
-    std::cout << "[GST] Destructing gameStateTracker" << std::endl;
 }
 
 void GameStateTracker::setReader(Reader *reader) {
@@ -265,33 +259,77 @@ void GameStateTracker::processReferee(const SSL_Referee& packet){
     gameState.blue.name = packet.blue().name();
 }
 
-void GameStateTracker::addTimeline(){
+void GameStateTracker::addInfo(){
 
+    /* Add timeline */
     std::string stage;
     std::string cmd;
 
-    gameState.timeline.clear();
+    // reset everything
+    reader->reset();
+    //Todo reset struct
+
     while(!reader->isEof()){
         int type = reader->next();
+        gameState.gameInfo.nPackets++;
+
+        // Referee packet
         if(type == MESSAGE_SSL_REFBOX_2013) {
             if (refereePacket.ParseFromArray(reader->getData(), reader->getDataHeader().messageSize)) {
+                gameState.gameInfo.nPackets_referee++;
                 processReferee(refereePacket);
                 if (stage != gameState.stage || cmd != gameState.command) {
                     stage = gameState.stage;
                     cmd = gameState.command;
                     double timestamp = reader->getDataHeader().timestamp / 1000000000.0;
-                    gameState.timeline.emplace_back(timestamp, stage, cmd, recordingState);
+                    gameState.gameInfo.timeline.emplace_back(timestamp, stage, cmd, recordingState);
                 }
+            }else{
+                gameState.gameInfo.nPackets_invalid++;
             }
+        }else
+
+        // Vision packet
+        if(type == MESSAGE_SSL_VISION_2010){
+            if (wrapperPacket.ParseFromArray(reader->getData(), reader->getDataHeader().messageSize)) {
+                if(wrapperPacket.has_detection())
+                    gameState.gameInfo.nPackets_vision++;
+                if(wrapperPacket.has_geometry())
+                    gameState.gameInfo.nPackets_vision++;
+            }else{
+                gameState.gameInfo.nPackets_invalid++;
+            }
+        }else
+
+        // Weird packet
+        if(type == MESSAGE_UNKNOWN || type == MESSAGE_BLANK){
+            gameState.gameInfo.nPackets_invalid++;
         }
     }
 
     double timestamp = reader->getDataHeader().timestamp / 1000000000.0;
-    gameState.timeline.emplace_back(timestamp, "END", "END", RecordingState::SKIPPING);
+    gameState.gameInfo.timeline.emplace_back(timestamp, "END", "END", RecordingState::SKIPPING);
 
 //    std::cout << std::setprecision(15) << std::endl;
 //    for(std::tuple<double, std::string, std::string> myTuple : gameState.timeline)
 //        std::cout << std::get<0>(myTuple) << "::" << std::get<1>(myTuple) << "::"  << std::get<2>(myTuple) << std::endl;
 
+    double t_start = std::get<0>(gameState.gameInfo.timeline.front());
+    double t_end = std::get<0>(gameState.gameInfo.timeline.back());
+    double t_duration = t_end - t_start;
+
+    gameState.gameInfo.t_start = t_start;
+    gameState.gameInfo.t_stop = t_end;
+    gameState.gameInfo.t_duration = t_duration;
+
+
     reader->reset();
+}
+
+const GameState& GameStateTracker::get() {
+    return gameState;
+}
+
+const GameInfo& GameStateTracker::getInfo(){
+    return gameState.gameInfo;
 }
