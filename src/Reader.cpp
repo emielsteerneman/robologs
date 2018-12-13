@@ -1,7 +1,3 @@
-//
-// Created by emiel on 4-12-18.
-//
-
 #include "protobuf/ssl_referee.pb.h"
 #include "protobuf/messages_robocup_ssl_wrapper.pb.h"
 #include <iostream>
@@ -15,19 +11,12 @@
 
 #include "Reader.h"
 
-Reader::Reader() {
-}
-
-Reader::~Reader() {
-}
-
 bool Reader::openFile(std::string filename) {
-    this->filename = filename;
 
     // Open file for reading
     in = std::ifstream(filename, std::ios_base::in | std::ios_base::binary);
     if (!in.is_open()) {
-        std::cerr << "[Reader] Error opening log file \"" << filename << "\"!" << std::endl;
+        std::cerr << "[Reader] Error opening file \"" << filename << "\"!" << std::endl;
         return false;
     }
     std::cout << "[Reader] file opened : " << filename << std::endl;
@@ -72,29 +61,32 @@ void Reader::reset(){
     in.seekg(0, std::ios::beg);
     readHeader();
 
-    read = 0;
+    packetsRead = 0;
 }
 
 int Reader::next(){
+
     if(!in.is_open()){
-        std::cout << "[Reader] file is not open. Could not read next line." << std::endl;
-        return -1;
+        std::cout << "[Reader] File is not open. Could not read next line." << std::endl;
+        return FILE_CLOSED;
     }
 
     if(in.eof()){
-        std::cout << "[Reader] At end of file. Nothing more to read." << std::endl;
-        return -2;
+        std::cout << "[Reader] EOF reached. Nothing more to read." << std::endl;
+        return END_OF_FILE;
     }
 
+    // Read the Data Header of the packet
     in.read((char*) &dataHeader, sizeof(dataHeader));
     // Log data is stored big endian, convert to host byte order
     dataHeader.timestamp = be64toh(dataHeader.timestamp);
     dataHeader.messageType = be32toh(dataHeader.messageType);
     dataHeader.messageSize = be32toh(dataHeader.messageSize);
-
+    // Read the Data of the packet
     data = new char[dataHeader.messageSize];
     in.read(data, dataHeader.messageSize);
 
-    read++;
+    packetsRead++;
     return dataHeader.messageType;
+
 }

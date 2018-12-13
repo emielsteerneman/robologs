@@ -1,6 +1,4 @@
-//
-// Created by emiel on 4-12-18.
-//
+/* Reads .log files using a stream. Extracted data can be parsed into protobuf objects */
 
 #ifndef SSL_LOGTOOLS_READER_H
 #define SSL_LOGTOOLS_READER_H
@@ -24,6 +22,8 @@ struct DataHeader
 
 enum MessageType
 {
+    FILE_CLOSED = -2,
+    END_OF_FILE = -1,
     MESSAGE_BLANK = 0,
     MESSAGE_UNKNOWN = 1,
     MESSAGE_SSL_VISION_2010 = 4,
@@ -31,30 +31,54 @@ enum MessageType
 };
 
 class Reader {
-    std::string filename;
-    FileHeader fileHeader;
-    DataHeader dataHeader;
-    char* data = nullptr;
-    std::ifstream in;
 
-    void readHeader();
+    std::ifstream in;       // File stream used to read the file
+    FileHeader fileHeader;  // FileHeader from the file last opened
+    DataHeader dataHeader;  // DataHeader from the packet last read
+    char* data = nullptr;   // Data of the packet last read
+
+    void readHeader();      // Reads the FileHeader of the file stream
 
 public:
 
-    Reader();
-    ~Reader();
-
-    const char* getData();
-    const DataHeader& getDataHeader();
+    /** @return the FileHeader from the file last opened */
     const FileHeader& getFileHeader();
+    /** @return the DataHeader from the last packet read */
+    const DataHeader& getDataHeader();
+    /** @return the data from the packet last read */
+    const char* getData();
 
-    int read = 0;
+    int packetsRead = 0;
 
+    /** @param filename : The path of the file to be opened and read
+     * @return true if the file has been opened successfully
+     */
     bool openFile(std::string filename);
+
+    /** @return true if the file is open, false if not */
     bool isOpen();
+
+    /** @return true if the file is open, false if not */
     bool isEof();
+
+    /** Resets Reader to initial state, as if it has been opened for the first time */
     void reset();
+
+    /** Reads the next packet in the file stream, and stores the data header and the data
+     * @return MessageType, indicating if the packet was read, and of what type the packet is
+     */
     int next();
 };
 
 #endif //SSL_LOGTOOLS_READER_H
+
+
+
+
+
+
+
+
+
+
+
