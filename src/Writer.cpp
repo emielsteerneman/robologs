@@ -5,6 +5,7 @@
 #include "Writer.h"
 #include <iostream>
 #include <iomanip>
+#include <sstream>
 
 Writer::Writer(std::string filename) : filename(filename){
     std::cout << "Created Writer. filename=" << filename << std::endl;
