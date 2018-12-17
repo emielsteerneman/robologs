@@ -11,6 +11,8 @@
 #include <QLabel>
 #include <QPainter>
 #include <QColor>
+#include <QTimer>
+#include <iostream>
 
 std::shared_ptr<testUI> window;
 const QColor FIELD_COLOR {50, 255, 50, 255};
@@ -36,10 +38,19 @@ testUI::testUI(QWidget * parent) : QMainWindow(parent){
 
     setCentralWidget(new QWidget);
     centralWidget()->setLayout(horizontalLayout.get());
+
+
+    auto *timer = new QTimer(this);
+    connect(timer, SIGNAL(timeout()), this, SLOT(update())); // Triggers PaintEvent
+    connect(timer, SIGNAL(timeout()), this, SLOT(updateUi()));
+//    connect(timer, SIGNAL(timeout()), this, SLOT(updateWidgets()));
+    timer->start(20); // delay in ms
+
 }
 
 void testUI::updateUi() {
-    button1->setText(QString::number(23));
+    button1->setText(QString::number(x));
+    x++;
 }
 
 Field::Field(QWidget *parent) : QWidget(parent){
@@ -51,21 +62,13 @@ Field::Field(QWidget *parent) : QWidget(parent){
 }
 
 void Field::paintEvent(QPaintEvent* event) {
+    std::cout << "PaintEvent triggered " << std::endl;
     QPainter painter(this);
     painter.setBrush(FIELD_COLOR);
     painter.drawRect(0,0, this->size().width(), this->size().height());
     painter.drawText(24,24, "Waiting for incoming World State");
+
+    painter.drawLine(0, 0, x, 100);
+    x++;
 }
 
-
-int main(int argc, char* argv[]) {
-
-    // initialize the interface
-    QApplication a(argc, argv);
-    window = std::make_shared<testUI>();
-    window->show();
-
-    window->updateUi();
-
-    return a.exec();
-}

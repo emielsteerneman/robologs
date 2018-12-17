@@ -85,16 +85,24 @@ struct Team {
 };
 
 struct GameInfo {
-    double t_start;
-    double t_stop;
-    double t_duration;
+    double t_start = 0;
+    double t_stop = 0;
+    double t_duration = 0;
 
     std::vector<std::tuple<double, std::string, std::string, RecordingState >> timeline;
-    int nPackets;
-    int nPackets_referee;
-    int nPackets_vision;
-    int nPackets_geometry;
-    int nPackets_invalid;
+
+    int nPackets = 0;
+    int referee_nPackets = 0;
+    int vision_nPackets = 0;
+    int geometry_nPackets = 0;
+    int invalid_nPackets = 0;
+
+    double pps;
+    double referee_pps;
+    double vision_pps = 0;
+    double geometry_pps;
+    double invalid_pps;
+
 };
 
 
@@ -130,7 +138,7 @@ public:
 
     GameStateTracker(int hz);
 
-    void setReader(Reader* reader);
+    void setInput(Reader *reader);
     void processVision(const SSL_DetectionFrame& packet);
     void processReferee(const SSL_Referee& packet);
     bool tick();

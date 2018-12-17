@@ -14,7 +14,7 @@ GameStateTracker::GameStateTracker(int hz) : hz(hz){
     gameState.isInitial = true;
 }
 
-void GameStateTracker::setReader(Reader *reader) {
+void GameStateTracker::setInput(Reader *reader) {
     this->reader = reader;
 }
 
@@ -261,6 +261,11 @@ void GameStateTracker::processReferee(const SSL_Referee& packet){
 
 void GameStateTracker::addInfo(){
 
+    if(!reader->isOpen()) {
+        std::cout << "[GST][addInfo] Warning! Reader not ready!" << std::endl;
+        return;
+    }
+
     /* Add timeline */
     std::string stage;
     std::string cmd;
@@ -275,9 +280,11 @@ void GameStateTracker::addInfo(){
 
         // Referee packet
         if(type == MESSAGE_SSL_REFBOX_2013) {
-            if (refereePacket.ParseFromArray(reader->getData(), reader->getDataHeader().messageSize)) {
-                gameState.gameInfo.nPackets_referee++;
+            if (refereePacket.ParseFromArray(reader->getData(), reader->getDataHeader().messageSize)) { // Parse packet
+                // Process referee packet
+                gameState.gameInfo.referee_nPackets++;
                 processReferee(refereePacket);
+                // Add stage/command change to timeline
                 if (stage != gameState.stage || cmd != gameState.command) {
                     stage = gameState.stage;
                     cmd = gameState.command;
@@ -285,7 +292,7 @@ void GameStateTracker::addInfo(){
                     gameState.gameInfo.timeline.emplace_back(timestamp, stage, cmd, recordingState);
                 }
             }else{
-                gameState.gameInfo.nPackets_invalid++;
+                gameState.gameInfo.invalid_nPackets++; // Parse failed
             }
         }else
 
@@ -293,17 +300,17 @@ void GameStateTracker::addInfo(){
         if(type == MESSAGE_SSL_VISION_2010){
             if (wrapperPacket.ParseFromArray(reader->getData(), reader->getDataHeader().messageSize)) {
                 if(wrapperPacket.has_detection())
-                    gameState.gameInfo.nPackets_vision++;
+                    gameState.gameInfo.vision_nPackets++;
                 if(wrapperPacket.has_geometry())
-                    gameState.gameInfo.nPackets_vision++;
+                    gameState.gameInfo.geometry_nPackets++;
             }else{
-                gameState.gameInfo.nPackets_invalid++;
+                gameState.gameInfo.invalid_nPackets++; // Parse failed
             }
         }else
 
         // Weird packet
         if(type == MESSAGE_UNKNOWN || type == MESSAGE_BLANK){
-            gameState.gameInfo.nPackets_invalid++;
+            gameState.gameInfo.invalid_nPackets++; // Parse failed
         }
     }
 
@@ -322,6 +329,11 @@ void GameStateTracker::addInfo(){
     gameState.gameInfo.t_stop = t_end;
     gameState.gameInfo.t_duration = t_duration;
 
+    gameState.gameInfo.pps          = gameState.gameInfo.nPackets / t_duration;
+    gameState.gameInfo.referee_pps  = gameState.gameInfo.referee_nPackets  / t_duration;
+    gameState.gameInfo.vision_pps   = gameState.gameInfo.vision_nPackets   / t_duration;
+    gameState.gameInfo.geometry_pps = gameState.gameInfo.geometry_nPackets / t_duration;
+    gameState.gameInfo.invalid_pps  = gameState.gameInfo.invalid_nPackets  / t_duration;
 
     reader->reset();
 }

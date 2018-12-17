@@ -15,6 +15,7 @@ class Field : public QWidget {
 Q_OBJECT
 public:
     explicit Field(QWidget* parent = nullptr);
+    int x = 0;
 protected:
     void paintEvent(QPaintEvent *event) override;
 };
@@ -23,8 +24,9 @@ class testUI : public QMainWindow {
 Q_OBJECT
 public:
     explicit testUI(QWidget * parent = nullptr);
+    int x = 0;
+public slots:
     void updateUi();
-
 private:
     std::shared_ptr<QHBoxLayout> horizontalLayout;
     std::shared_ptr<QVBoxLayout> verticalLayout;
