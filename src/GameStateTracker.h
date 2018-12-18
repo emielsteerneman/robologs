@@ -102,9 +102,7 @@ struct GameInfo {
     double vision_pps = 0;
     double geometry_pps;
     double invalid_pps;
-
 };
-
 
 struct GameState {
     bool isInitial;
@@ -136,9 +134,11 @@ public:
     RecordingState recordingState = RecordingState::RECORDING;
     int parsed = 0;
 
-    GameStateTracker(int hz);
+    GameStateTracker();
 
     void setInput(Reader *reader);
+    void setHz(int);
+
     void processVision(const SSL_DetectionFrame& packet);
     void processReferee(const SSL_Referee& packet);
     bool tick();

@@ -4,6 +4,9 @@
 #include <QObject>
 #include <QTimer>
 
+#include "Reader.h"
+#include "GameStateTracker.h"
+
 class Player : public QObject {
 Q_OBJECT
 public:
@@ -11,13 +14,17 @@ public:
     void start();
 
 signals:
-    void nextGameState(int state);
+    void nextGameState(const GameState& gameState);
 
 public slots:
     void tick();
+
 private:
     QTimer *timer;
     int timerCount = 0;
+
+    Reader reader;
+    GameStateTracker tracker;
 };
 
 

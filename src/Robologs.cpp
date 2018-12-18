@@ -1,6 +1,12 @@
-//
-// Created by emiel on 4-12-18.
-//
+/*
+
+How would this work?
+
+* Somehow grab a vision/referee packet from some kind of source
+* Stuff that packet into the GameStateTracker
+* Get the GameState as soon as the interval has been reached
+
+*/
 
 #include <iostream>
 #include <iomanip>
@@ -50,7 +56,7 @@ int Robologs::start(int argc, char* argv[]) {
     Interface interface;
     interface.show();
 
-    connect(&player, SIGNAL(nextGameState(int)), &interface, SLOT(updateGameState(int)));
+    connect(&player, SIGNAL(nextGameState(const GameState&)), &interface, SLOT(updateGameState(const GameState&)));
 
     player.start();
 

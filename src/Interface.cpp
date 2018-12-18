@@ -1,6 +1,7 @@
 
 #include <iostream>
 #include <QApplication>
+#include <QString>
 
 #include "Interface.h"
 
@@ -29,9 +30,11 @@ Interface::Interface(QWidget *parent) : QWidget(parent) {
 
 }
 
-void Interface::updateGameState(int i){
+void Interface::updateGameState(const GameState& gameState){
     std::cout << "[Interface] Updating game state" << std::endl;
-    bar->setValue(i);
+//    QString str = std::to_string(gameState.timestamp);
+    btn->setText(QString::number(gameState.timestamp));
+    bar->setValue(bar->value() + 1);
 }
 
 

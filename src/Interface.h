@@ -7,6 +7,8 @@
 #include <QProgressBar>
 #include <QSlider>
 
+#include "GameStateTracker.h"
+
 class Interface : public QWidget {
 Q_OBJECT
 public:
@@ -14,7 +16,7 @@ public:
 
 signals:
 public slots:
-    void updateGameState(int i);
+    void updateGameState(const GameState& gameState);
 private:
     QPushButton *btn;
     QProgressBar *bar;

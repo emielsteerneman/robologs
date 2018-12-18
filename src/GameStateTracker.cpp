@@ -1,5 +1,3 @@
-
-
 #include <stdio.h>
 #include <iostream>
 #include <iomanip>
@@ -9,12 +7,16 @@
 
 #include "GameStateTracker.h"
 
-GameStateTracker::GameStateTracker(int hz) : hz(hz){
+GameStateTracker::GameStateTracker() {
     gameState.isInitial = true;
 }
 
 void GameStateTracker::setInput(Reader *reader) {
     this->reader = reader;
+}
+
+void GameStateTracker::setHz(int hz) {
+    this->hz = hz;
 }
 
 /* Processes all packets within the next interval and accumulates data in the gameState */

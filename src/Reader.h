@@ -22,6 +22,7 @@ struct DataHeader
 
 enum MessageType
 {
+    MESSAGE_INVALID = -3,
     FILE_CLOSED = -2,
     END_OF_FILE = -1,
     MESSAGE_BLANK = 0,
@@ -37,6 +38,9 @@ class Reader {
     DataHeader dataHeader;  // DataHeader from the packet last read
     char* data = nullptr;   // Data of the packet last read
 
+    SSL_WrapperPacket wrapperPacket;
+    SSL_Referee refereePacket;
+
     void readHeader();      // Reads the FileHeader of the file stream
 
 public:
@@ -47,6 +51,10 @@ public:
     const DataHeader& getDataHeader();
     /** @return the data from the packet last read */
     const char* getData();
+    /** @return the last SSL_WrapperPacket read */
+    const SSL_WrapperPacket& getVision();
+    /** @return the last SSL_Referee packet read */
+    const SSL_Referee& getReferee();
 
     int packetsRead = 0;
 

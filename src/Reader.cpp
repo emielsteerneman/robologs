@@ -41,6 +41,14 @@ bool Reader::isEof(){
     return in.is_open() && in.eof();
 }
 
+const SSL_WrapperPacket& Reader::getVision(){
+    return wrapperPacket;
+}
+
+const SSL_Referee& Reader::getReferee() {
+    return refereePacket;
+}
+
 const char* Reader::getData(){
     return data;
 }
@@ -86,7 +94,31 @@ int Reader::next(){
     data = new char[dataHeader.messageSize];
     in.read(data, dataHeader.messageSize);
 
+    /* === data to object === */
+    int type = dataHeader.messageType;
+    /* Parse Referee message */
+    if(type == MESSAGE_SSL_REFBOX_2013){
+        if (refereePacket.ParseFromArray(data, dataHeader.messageSize)) {
+            return type;
+        } else {
+            std::cout << "[Reader] Warning! Could not parse referee packet" << std::endl;
+            return MESSAGE_INVALID;
+        }
+    }
+
+    /* Parse Vision or Geometry message */
+    if(type == MESSAGE_SSL_VISION_2010) {
+        if(wrapperPacket.ParseFromArray(data, dataHeader.messageSize)){
+            if(wrapperPacket.has_detection()){
+                return type;
+            }
+        }else{
+            std::cout << "[Reader] Warning! Could not parse vision packet" << std::endl;
+            return MESSAGE_INVALID;
+        }
+    }
+
     packetsRead++;
-    return dataHeader.messageType;
+    return MESSAGE_UNKNOWN;
 
 }
