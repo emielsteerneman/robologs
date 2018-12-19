@@ -1,7 +1,3 @@
-//
-// Created by emiel on 4-12-18.
-//
-
 #ifndef SSL_LOGTOOLS_GAMESTATETRACKER_H
 #define SSL_LOGTOOLS_GAMESTATETRACKER_H
 
@@ -105,7 +101,7 @@ struct GameInfo {
 };
 
 struct GameState {
-    bool isInitial;
+    bool isInitial = true;
     double timestamp;
     std::string stage;
     std::string command;
@@ -126,7 +122,9 @@ class GameStateTracker {
     GameState gameState;
 
     int hz; // Hz at which the game should update
-    double lastInterval = true; // Timestamp of the last interval. Used to provide consistent FPS
+
+    double lastInterval = 0; // Timestamp of the last interval. Used to provide consistent FPS
+    double nextInterval = 0;
 
 public:
 
@@ -136,18 +134,20 @@ public:
 
     GameStateTracker();
 
+    const GameState& get();
+    const GameInfo& getInfo();
+
     void setInput(Reader *reader);
     void setHz(int);
 
-    void processVision(const SSL_DetectionFrame& packet);
+    void reset();
+
+    bool processVision(const SSL_DetectionFrame& packet);
     void processReferee(const SSL_Referee& packet);
     bool tick();
 
     void addInfo();
 
-    const GameState& get();
-    const GameInfo& getInfo();
 };
-
 
 #endif //SSL_LOGTOOLS_GAMESTATETRACKER_H

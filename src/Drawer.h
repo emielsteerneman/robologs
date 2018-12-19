@@ -27,7 +27,7 @@ public:
     cv::Mat kernelRed;
     cv::Mat kernelBlue;
     cv::Mat kernelOrange;
-
+ 
     cv::Mat img;
     cv::Mat frame;
 

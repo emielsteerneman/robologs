@@ -8,7 +8,15 @@
 #include "GameStateTracker.h"
 
 GameStateTracker::GameStateTracker() {
-    gameState.isInitial = true;
+    reset();
+}
+
+const GameState& GameStateTracker::get() {
+    return gameState;
+}
+
+const GameInfo& GameStateTracker::getInfo(){
+    return gameState.gameInfo;
 }
 
 void GameStateTracker::setInput(Reader *reader) {
@@ -17,6 +25,11 @@ void GameStateTracker::setInput(Reader *reader) {
 
 void GameStateTracker::setHz(int hz) {
     this->hz = hz;
+}
+
+void GameStateTracker::reset(){
+    gameState = {};
+    gameState.isInitial = true;
 }
 
 /* Processes all packets within the next interval and accumulates data in the gameState */
@@ -93,10 +106,31 @@ bool GameStateTracker::tick() {
     return true;
 }
 
-void GameStateTracker::processVision(const SSL_DetectionFrame& packet){
+bool GameStateTracker::processVision(const SSL_DetectionFrame& packet){
+    // Todo don't need both lastInterval and nextInterval
+
+    // Sanity check on Hz. Should be non-negative
+    if(hz < 1){
+        std::cout << "[GST][pV] Warning! Incorrect Hz. Hz = " << hz << std::endl;
+        return false;
+    }
+
     parsed++;
     gameState.timestamp = packet.t_capture();
 
+    // Set next interval if state is initial
+    if(gameState.isInitial){
+        lastInterval = gameState.timestamp;
+        nextInterval = lastInterval + 1.0 / hz;
+        gameState.isInitial = false;
+    }
+
+    std::cout << std::setprecision(12) << std::fixed;
+    std::cout << "[GST][pV] Currently at  = " << gameState.timestamp << std::endl;
+    std::cout << "[GST][pV] Next interval = " << nextInterval << std::endl;
+
+    // Two brackets simply for folding code
+    {
     /* Yellow Team */
     for(const SSL_DetectionRobot& packetBot : packet.robots_yellow()){
         bool found = false;
@@ -169,6 +203,17 @@ void GameStateTracker::processVision(const SSL_DetectionFrame& packet){
         gameState.ball.y = packet.balls(0).y();
         gameState.ball.y_buf.put(gameState.ball.y);
     }
+    }
+
+    // Check if interval has been reached
+    if(nextInterval <= gameState.timestamp){
+        std::cout << "[GST][pV] Interval reached" << std::endl;
+        lastInterval = nextInterval;
+        nextInterval = lastInterval + 1.0 / hz;
+        return true;
+    }
+
+    return false;
 }
 
 void GameStateTracker::processReferee(const SSL_Referee& packet){
@@ -269,10 +314,3 @@ void GameStateTracker::addInfo(){
     reader->reset();
 }
 
-const GameState& GameStateTracker::get() {
-    return gameState;
-}
-
-const GameInfo& GameStateTracker::getInfo(){
-    return gameState.gameInfo;
-}

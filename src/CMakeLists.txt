@@ -15,7 +15,7 @@ set(CMAKE_AUTOUIC ON)
 # Find the QtWidgets library
 find_package(Qt5Widgets CONFIG REQUIRED)
 
-add_executable(robologs Robologs.cpp GameStateTracker.cpp Reader.cpp Drawer.cpp Writer.cpp Interface.cpp Player.cpp)
+add_executable(robologs Robologs.cpp GameStateTracker.cpp Reader.cpp Drawer.cpp Writer.cpp Interface.cpp Player.cpp Field.cpp Field.h)
 target_link_libraries(robologs protobuf ${OpenCV_LIBS} Qt5::Widgets Qt5::Gui)
 
 #add_executable(ui Interface.cpp)

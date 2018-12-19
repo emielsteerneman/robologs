@@ -7,10 +7,10 @@
 
 Interface::Interface(QWidget *parent) : QWidget(parent) {
     std::cout << "[Interface] New interface created" << std::endl;
-    setFixedSize(200, 300);
+//    setFixedSize(600, 400);
 
     btn = new QPushButton("Hello World", this);
-    btn->setGeometry(30, 30, 140, 40);
+    btn->setGeometry(30, 30, 540, 40);
     btn->setCheckable(true);
 
 //    connect(btn, SIGNAL(clicked()), QApplication::instance(), SLOT(quit()));
@@ -18,23 +18,35 @@ Interface::Interface(QWidget *parent) : QWidget(parent) {
     bar = new QProgressBar(this);
     bar->setRange(0, 100);
     bar->setValue(0);
-    bar->setGeometry(30, 130, 140, 40);
+    bar->setGeometry(30, 130, 540, 40);
 
     slider = new QSlider(this);
     slider->setOrientation(Qt::Horizontal);
     slider->setRange(0, 100);
     slider->setValue(0);
-    slider->setGeometry(30, 230, 140, 40);
+    slider->setGeometry(30, 230, 540, 40);
 
     connect(slider, SIGNAL(valueChanged(int)), bar, SLOT(setValue(int)));
 
+    line = new QLineEdit(this);
+    line->setGeometry(30, 330, 540, 40);
+
+    field = new Field(this);
+
 }
 
-void Interface::updateGameState(const GameState& gameState){
+void Interface::updateGameState(const GameState &gameState) {
     std::cout << "[Interface] Updating game state" << std::endl;
 //    QString str = std::to_string(gameState.timestamp);
     btn->setText(QString::number(gameState.timestamp));
     bar->setValue(bar->value() + 1);
+
+    std::string str = std::to_string(gameState.timestamp);
+    str += "    x=" + std::to_string(gameState.yellow.robots.front().x_buf.avg());
+    str += "    y=" + std::to_string(gameState.yellow.robots.front().y_buf.avg());
+    line->setText(QString::fromStdString(str));
+
+    field->drawGameState(gameState);
 }
 
 

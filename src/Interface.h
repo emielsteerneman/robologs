@@ -6,7 +6,9 @@
 #include <QPushButton>
 #include <QProgressBar>
 #include <QSlider>
+#include <QLineEdit>
 
+#include "Field.h"
 #include "GameStateTracker.h"
 
 class Interface : public QWidget {
@@ -14,13 +16,14 @@ Q_OBJECT
 public:
     explicit Interface(QWidget *parent = 0);
 
-signals:
 public slots:
     void updateGameState(const GameState& gameState);
 private:
     QPushButton *btn;
     QProgressBar *bar;
     QSlider *slider;
+    QLineEdit *line;
+    Field *field;
 };
 
 #endif // ROBOLOGS_INTERFACE_H
