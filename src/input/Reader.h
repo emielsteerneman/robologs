@@ -45,18 +45,25 @@ class Reader {
 
 public:
 
+    int packetsRead = 0;
+
     /** @return the FileHeader from the file last opened */
     const FileHeader& getFileHeader();
+
     /** @return the DataHeader from the last packet read */
     const DataHeader& getDataHeader();
+
     /** @return the data from the packet last read */
     const char* getData();
+
+    /** @return the percentage of the file read **/
+    double getProgress();
+
     /** @return the last SSL_WrapperPacket read */
     const SSL_WrapperPacket& getVision();
+
     /** @return the last SSL_Referee packet read */
     const SSL_Referee& getReferee();
-
-    int packetsRead = 0;
 
     /** @param filename : The path of the file to be opened and read
      * @return true if the file has been opened successfully

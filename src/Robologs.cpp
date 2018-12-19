@@ -13,15 +13,15 @@ How would this work?
 #include <QApplication>
 #include <QObject>
 #include <QTimer>
+#include <QThread>
 
 #include "Robologs.h"
-#include "Reader.h"
-#include "GameStateTracker.h"
+#include "input/Reader.h"
+#include "game/GameStateTracker.h"
 #include "Player.h"
-#include "Interface.h"
-#include "Drawer.h"
-#include "Writer.h"
-#include "Utilities.h"
+#include "interface/Interface.h"
+#include "output/Drawer.h"
+#include "output/Writer.h"
 
 
 int fps = 60;
@@ -29,8 +29,6 @@ int nStates = 1000;
 
 Robologs::Robologs() : QObject(){
     std::cout << "[Robologs] New Robologs constructed" << std::endl;
-
-
 
 //    Reader reader;
 //    reader.openFile("../../2018-06-20_21-21_TIGERs_Mannheim-vs-CMμs.log");
@@ -53,7 +51,11 @@ int Robologs::start(int argc, char* argv[]) {
 
     Player player;
 
+    QThread *thread = new QThread(this);
+
+
     Interface interface;
+    interface.setWindowState(Qt::WindowMaximized);
     interface.show();
 
     connect(&player, SIGNAL(nextGameState(const GameState&)), &interface, SLOT(updateGameState(const GameState&)));
@@ -67,9 +69,8 @@ int Robologs::start(int argc, char* argv[]) {
 int main(int argc, char* argv[]) {
 
     Robologs robologs;
-    robologs.start(argc, argv);
 
-    return 0;
+    return robologs.start(argc, argv);
 
 
 //    std::string started_at = u::timeToString(tracker.getInfo().t_start);

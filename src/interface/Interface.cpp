@@ -7,7 +7,7 @@
 
 Interface::Interface(QWidget *parent) : QWidget(parent) {
     std::cout << "[Interface] New interface created" << std::endl;
-//    setFixedSize(600, 400);
+    std::cout << "[Interface] width=" << this->width() << " height=" << this->height() << std::endl;
 
     btn = new QPushButton("Hello World", this);
     btn->setGeometry(30, 30, 540, 40);
@@ -32,7 +32,15 @@ Interface::Interface(QWidget *parent) : QWidget(parent) {
     line->setGeometry(30, 330, 540, 40);
 
     field = new Field(this);
+}
 
+void Interface::resizeEvent(QResizeEvent *event) {
+    std::cout << "[Interface][resizeEvent] width=" << this->width() << " height=" << this->height() << std::endl;
+    int width = this->width();
+    int height = this->height();
+
+    int fieldOffset = (height - field->height()) / 2;
+    field->move(fieldOffset, fieldOffset);
 }
 
 void Interface::updateGameState(const GameState &gameState) {
@@ -46,7 +54,8 @@ void Interface::updateGameState(const GameState &gameState) {
     str += "    y=" + std::to_string(gameState.yellow.robots.front().y_buf.avg());
     line->setText(QString::fromStdString(str));
 
-    field->drawGameState(gameState);
+    field->setGameState(gameState);
+    field->update();
 }
 
 

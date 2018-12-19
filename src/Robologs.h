@@ -5,9 +5,9 @@
 #ifndef ROBOLOGS_ROBOLOGS_H
 #define ROBOLOGS_ROBOLOGS_H
 
-#include "Reader.h"
-#include "GameStateTracker.h"
-#include "Interface.h"
+#include "input/Reader.h"
+#include "game/GameStateTracker.h"
+#include "interface/Interface.h"
 
 class Robologs : public QObject {
     Q_OBJECT

@@ -5,7 +5,7 @@
 #ifndef ROBOLOGS_DRAWER_H
 #define ROBOLOGS_DRAWER_H
 
-#include "GameStateTracker.h"
+#include "game/GameStateTracker.h"
 #include <opencv2/opencv.hpp>
 
 class Drawer {

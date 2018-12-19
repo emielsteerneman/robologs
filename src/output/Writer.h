@@ -5,7 +5,7 @@
 #ifndef ROBOLOGS_WRITER_H
 #define ROBOLOGS_WRITER_H
 
-#include "GameStateTracker.h"
+#include "game/GameStateTracker.h"
 #include <fstream>
 
 class Writer {

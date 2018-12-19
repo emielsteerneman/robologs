@@ -9,12 +9,13 @@
 #include <QLineEdit>
 
 #include "Field.h"
-#include "GameStateTracker.h"
+#include "game/GameStateTracker.h"
 
 class Interface : public QWidget {
 Q_OBJECT
 public:
     explicit Interface(QWidget *parent = 0);
+    void resizeEvent(QResizeEvent *event) override;
 
 public slots:
     void updateGameState(const GameState& gameState);

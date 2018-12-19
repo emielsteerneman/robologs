@@ -2,7 +2,7 @@
 #define SSL_LOGTOOLS_GAMESTATETRACKER_H
 
 #define CIRCULAR_BUFFER_SIZE 20
-#include "Reader.h"
+#include "input/Reader.h"
 #include <vector>
 #include <tuple>
 #include <time.h>
@@ -80,26 +80,6 @@ struct Team {
     std::vector<Robot> robots;
 };
 
-struct GameInfo {
-    double t_start = 0;
-    double t_stop = 0;
-    double t_duration = 0;
-
-    std::vector<std::tuple<double, std::string, std::string, RecordingState >> timeline;
-
-    int nPackets = 0;
-    int referee_nPackets = 0;
-    int vision_nPackets = 0;
-    int geometry_nPackets = 0;
-    int invalid_nPackets = 0;
-
-    double pps;
-    double referee_pps;
-    double vision_pps = 0;
-    double geometry_pps;
-    double invalid_pps;
-};
-
 struct GameState {
     bool isInitial = true;
     double timestamp;
@@ -110,8 +90,6 @@ struct GameState {
     Team blue;
 //    std::vector<Ball> balls;
     Ball ball;
-
-    GameInfo gameInfo;
 };
 
 
@@ -135,7 +113,6 @@ public:
     GameStateTracker();
 
     const GameState& get();
-    const GameInfo& getInfo();
 
     void setInput(Reader *reader);
     void setHz(int);
