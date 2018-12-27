@@ -11,10 +11,16 @@
 
 class Robologs : public QObject {
     Q_OBJECT
+
 public:
     explicit Robologs();
     int start(int argc, char* argv[]);
 
+signals:
+    void start();
+
+public slots:
+    void test();
 };
 
 #endif //ROBOLOGS_ROBOLOGS_H

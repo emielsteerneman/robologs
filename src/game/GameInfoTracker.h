@@ -18,7 +18,7 @@ struct GameInfo {
 class GameInfoTracker {
 public:
     GameInfoTracker();
-    const GameInfo& get();
+    const GameInfo* get();
     std::string getStage();
     std::string getCommand();
 

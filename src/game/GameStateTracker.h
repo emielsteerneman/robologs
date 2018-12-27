@@ -112,7 +112,7 @@ public:
 
     GameStateTracker();
 
-    const GameState& get();
+    const GameState* get();
 
     void setInput(Reader *reader);
     void setHz(int);

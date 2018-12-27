@@ -12,41 +12,43 @@
 Field::Field(QWidget *parent) : QWidget(parent) {
     std::cout << "[Field] New field created" << std::endl;
     setFixedSize(800, 600);
-
 }
 
-void Field::setGameState(const GameState &gameState) {
+void Field::setGameState(const GameState* gameState) {
     this->gameState = gameState;
 }
 
-
-
 void Field::paintEvent(QPaintEvent *event) {
+//    std::cout <<"[Field] paintEvent" << std::endl;
+
+    if(this->gameState == nullptr)
+        return;
+
     QPainter painter(this);
 
     painter.setBrush(QBrush(Qt::black));
-    painter.drawRect(1, 1, this->width()-1, this->height()-1);
+    painter.drawRect(0, 0, this->width(), this->height());
 
     drawField(painter);
 
     painter.setPen(QPen(Qt::white, 0));
     painter.setBrush(QBrush(Qt::red));
-    for(const Robot& robot : gameState.yellow.robots){
+    for(const Robot& robot : gameState->yellow.robots){
         int x = (int)(this->width() * (robot.x_buf.avg() + 6000) / 12000);
         int y = (int)(this->height()* (robot.y_buf.avg() + 4500) / 9000);
         painter.drawEllipse(x, y, 10, 10);
     }
 
     painter.setBrush(QBrush(Qt::blue));
-    for(const Robot& robot : gameState.blue.robots){
+    for(const Robot& robot : gameState->blue.robots){
         int x = (int)(this->width() * (robot.x_buf.avg() + 6000) / 12000);
         int y = (int)(this->height()* (robot.y_buf.avg() + 4500) / 9000);
         painter.drawEllipse(x, y, 10, 10);
     }
 
     painter.setBrush(QBrush(Qt::white));
-    int x = (int)(this->width() * (gameState.ball.x_buf.avg() + 6000) / 12000);
-    int y = (int)(this->height()* (gameState.ball.y_buf.avg() + 4500) / 9000);
+    int x = (int)(this->width() * (gameState->ball.x_buf.avg() + 6000) / 12000);
+    int y = (int)(this->height()* (gameState->ball.y_buf.avg() + 4500) / 9000);
     painter.drawEllipse(x, y, 10, 10);
 
 }

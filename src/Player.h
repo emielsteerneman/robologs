@@ -12,12 +12,13 @@ class Player : public QObject {
 Q_OBJECT
 public:
     explicit Player();
-    void start();
 
 signals:
-    void nextGameState(const GameState& gameState);
+    void signalGameState(const GameState* gameState);
+    void signalGameInfo(const GameInfo* gameInfo);
 
 public slots:
+    void start();
     void tick();
 
 private:

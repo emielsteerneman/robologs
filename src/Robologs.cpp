@@ -29,19 +29,6 @@ int nStates = 1000;
 
 Robologs::Robologs() : QObject(){
     std::cout << "[Robologs] New Robologs constructed" << std::endl;
-
-//    Reader reader;
-//    reader.openFile("../../2018-06-20_21-21_TIGERs_Mannheim-vs-CMμs.log");
-//
-//    GameStateTracker tracker(60);
-//    tracker.setInput(&reader);
-//    tracker.addInfo();
-//
-//    auto *timer = new QTimer();
-//    connect(timer, SIGNAL(timeout()), &iface, SLOT(update())); // Triggers PaintEvent
-//    connect(timer, SIGNAL(timeout()), &iface, SLOT(updateUi()));
-//    timer->start(1000); // delay in ms
-
 }
 
 int Robologs::start(int argc, char* argv[]) {
@@ -49,22 +36,28 @@ int Robologs::start(int argc, char* argv[]) {
 
     QApplication app(argc, argv);
 
-    Player player;
+    Interface* interface = new Interface();
+    interface->setWindowState(Qt::WindowMaximized);
+    interface->show();
 
+    Player* player = new Player();
     QThread *thread = new QThread(this);
+    player->moveToThread(thread);
+    connect(this, SIGNAL(start()), player, SLOT(start()));
+    thread->start();
 
+    connect(player, SIGNAL(signalGameState(const GameState*)), interface, SLOT(updateGameState(const GameState*)), Qt::BlockingQueuedConnection);
+    connect(player, SIGNAL(signalGameInfo(const GameInfo*)), interface, SLOT(setGameInfo(const GameInfo*)), Qt::BlockingQueuedConnection);
 
-    Interface interface;
-    interface.setWindowState(Qt::WindowMaximized);
-    interface.show();
+    emit start();
 
-    connect(&player, SIGNAL(nextGameState(const GameState&)), &interface, SLOT(updateGameState(const GameState&)));
-
-    player.start();
-
-    return app.exec();
+    int result = app.exec();
+    return result;
 }
 
+void Robologs::test(){
+    std::cout << "[Robologs] Test triggered!" << std::endl;
+}
 
 int main(int argc, char* argv[]) {
 

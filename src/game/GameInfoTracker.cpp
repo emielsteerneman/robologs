@@ -18,8 +18,8 @@ void GameInfoTracker::reset() {
     isInitial = true;
 }
 
-const GameInfo& GameInfoTracker::get(){
-    return gameInfo;
+const GameInfo* GameInfoTracker::get(){
+    return &gameInfo;
 }
 
 void GameInfoTracker::process(const DataHeader& dataHeader){
@@ -52,9 +52,9 @@ void GameInfoTracker::process(const SSL_Referee& refereePacket){
         gameInfo.timeline.emplace_back(gameInfo.t_stop, stage, command);
     }else{
         if(stage != getStage() || command != getCommand()){
-            std::cout << "[GIT] Change detected. "
-            << stage << "=>" << getStage() << " , "
-            << command << "=>" << getCommand() << std::endl;
+//            std::cout << "[GIT] Change detected. "
+//            << stage << "=>" << getStage() << " , "
+//            << command << "=>" << getCommand() << std::endl;
             gameInfo.timeline.emplace_back(gameInfo.t_stop, stage, command);
         }
     }

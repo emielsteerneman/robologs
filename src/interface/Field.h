@@ -17,16 +17,14 @@ class Field : public QWidget {
 Q_OBJECT
 public:
     //Todo make this a reference or pointer
-    GameState gameState;
+    const GameState* gameState = nullptr;
 
     explicit Field(QWidget *parent = 0);
-    void setGameState(const GameState& gameState);
+    void setGameState(const GameState* gameState);
     void paintEvent(QPaintEvent *event) override;
 
     void drawField(QPainter& painter);
 
-
-private:
 
 };
 
@@ -36,9 +34,9 @@ namespace FieldGeometry {
     const int FieldHeight = 600;
 
     const QPoint FieldTopLeft     = QPoint(0  , 0);
-    const QPoint FieldTopRight    = QPoint(800, 0);
-    const QPoint FieldBottomLeft  = QPoint(0  , 600);
-    const QPoint FieldBottomRight = QPoint(800, 600);
+    const QPoint FieldTopRight    = QPoint(799, 0);
+    const QPoint FieldBottomLeft  = QPoint(0  , 599);
+    const QPoint FieldBottomRight = QPoint(799, 599);
 
     const QPoint PenaltyLeftTopLeft     = QPoint(0  , 220);
     const QPoint PenaltyLeftTopRight    = QPoint(80 , 220);
@@ -46,12 +44,12 @@ namespace FieldGeometry {
     const QPoint PenaltyLeftBottomRight = QPoint(80 , 380);
 
     const QPoint PenaltyRightTopLeft     = QPoint(720, 220);
-    const QPoint PenaltyRightTopRight    = QPoint(800, 220);
+    const QPoint PenaltyRightTopRight    = QPoint(799, 220);
     const QPoint PenaltyRightBottomLeft  = QPoint(720, 380);
-    const QPoint PenaltyRightBottomRight = QPoint(800, 380);
+    const QPoint PenaltyRightBottomRight = QPoint(799, 380);
 
     const QPoint HalfHorizontalTop    = QPoint(400, 0);
-    const QPoint HalfHorizontalBottom = QPoint(400, 600);
+    const QPoint HalfHorizontalBottom = QPoint(400, 599);
 }
 
 #endif //ROBOLOGS_FIELD_H

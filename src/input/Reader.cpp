@@ -62,8 +62,10 @@ const FileHeader& Reader::getFileHeader(){
 }
 
 void Reader::reset(){
-    if(!in.is_open())
+    std::cout << "[Reader] Resetting" << std::endl;
+    if(!in.is_open()) {
         return;
+    }
 
     in.clear();
     in.seekg(0, std::ios::beg);

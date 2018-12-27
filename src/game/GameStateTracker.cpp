@@ -11,8 +11,8 @@ GameStateTracker::GameStateTracker() {
     reset();
 }
 
-const GameState& GameStateTracker::get() {
-    return gameState;
+const GameState* GameStateTracker::get() {
+    return &gameState;
 }
 
 void GameStateTracker::setInput(Reader *reader) {
@@ -122,8 +122,8 @@ bool GameStateTracker::processVision(const SSL_DetectionFrame& packet){
     }
 
     std::cout << std::setprecision(12) << std::fixed;
-    std::cout << "[GST][pV] Currently at  = " << gameState.timestamp << std::endl;
-    std::cout << "[GST][pV] Next interval = " << nextInterval << std::endl;
+//    std::cout << "[GST][pV] Currently at  = " << gameState.timestamp << std::endl;
+//    std::cout << "[GST][pV] Next interval = " << nextInterval << std::endl;
 
     // Two brackets simply for folding code
     {
@@ -203,7 +203,7 @@ bool GameStateTracker::processVision(const SSL_DetectionFrame& packet){
 
     // Check if interval has been reached
     if(nextInterval <= gameState.timestamp){
-        std::cout << "[GST][pV] Interval reached" << std::endl;
+//        std::cout << "[GST][pV] Interval reached" << std::endl;
         lastInterval = nextInterval;
         nextInterval = lastInterval + 1.0 / hz;
         return true;
