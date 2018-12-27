@@ -15,9 +15,9 @@ struct FileHeader
 
 struct DataHeader
 {
-    int64_t timestamp; // Timestamp in ns
-    int32_t messageType; // Message type
-    int32_t messageSize; // Size of protobuf message in bytes
+    int64_t timestamp = 0; // Timestamp in ns
+    int32_t messageType = 0; // Message type
+    int32_t messageSize = 0; // Size of protobuf message in bytes
 };
 
 enum MessageType

@@ -20,6 +20,8 @@ signals:
 public slots:
     void start();
     void tick();
+    void findProgress(double progress);
+    void findTimestamp(double timestamp);
 
 private:
     QTimer *timer;

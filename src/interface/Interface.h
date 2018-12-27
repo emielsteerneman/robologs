@@ -6,7 +6,7 @@
 #include <QPushButton>
 #include <QProgressBar>
 #include <QSlider>
-#include <QLineEdit>
+#include <QLabel>
 
 #include "Field.h"
 #include "Timeline.h"
@@ -19,6 +19,9 @@ public:
     explicit Interface(QWidget *parent = 0);
     void resizeEvent(QResizeEvent *event) override;
 
+signals:
+    void signalProgress(double progress);
+
 public slots:
     void updateGameState(const GameState* gameState);
     void setGameInfo(const GameInfo* gameInfo);
@@ -28,7 +31,14 @@ private:
 
     Field *field;
     Timeline *timeline;
-    QLineEdit* gameStageCommand;
+
+    QLabel* lGameCommand;
+    QLabel* lTeamYellow;
+    QLabel* lTeamBlue;
+
+    QLabel* lStats;
+
+
 };
 
 #endif // ROBOLOGS_INTERFACE_H

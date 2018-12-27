@@ -16,8 +16,8 @@ void Player::start() {
 
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(tick()));
-    timer->setInterval(1000/30);
-    tracker.setHz(1);
+    timer->setInterval(1000/60);
+    tracker.setHz(20);
     timer->start();
 }
 
@@ -40,9 +40,31 @@ void Player::getInfo(){
     emit signalGameInfo(infoTracker.get());
 }
 
-void Player::tick() {
-//    std::cout << "[Player] Tick" << std::endl;
+void Player::findProgress(double progress){
+    timer->stop();
+    std::cout << "[Player] going to progress " << progress << std::endl;
+    double duration = infoTracker.get()->t_stop - infoTracker.get()->t_start;
+    double timestamp = infoTracker.get()->t_start + progress * duration;
+    findTimestamp(timestamp);
+}
 
+void Player::findTimestamp(double timestamp){
+    std::cout << "[Player] going to timestamp " << u::timeToString(timestamp) << std::endl;
+    std::cout << " at " << u::timeToString(reader.getDataHeader().timestamp / 1000000000) << std::endl;
+    timer->stop();
+    reader.reset();
+
+    std::cout << "[Player] searching.. " << std::endl;
+    while(!reader.isEof() && (reader.getDataHeader().timestamp / 1000000000) < timestamp)
+        reader.next();
+
+    std::cout << "[Player] found" << std::endl;
+
+    timer->start();
+}
+
+void Player::tick() {
+//    std::cout << "tick" << std::endl;
     bool nextStateReached = false;
 
     while(!reader.isEof() && !nextStateReached) {
@@ -52,7 +74,7 @@ void Player::tick() {
             const SSL_WrapperPacket packet = reader.getVision();
             if (packet.has_detection())
                 if (tracker.processVision(packet.detection())) {
-//                    std::cout << "[Player] Gamestate has reached new gameState!" << std::endl;
+                    std::cout << " at " << u::timeToString(reader.getDataHeader().timestamp / 1000000000) << std::endl;
                     emit signalGameState(tracker.get());
                     nextStateReached = true;
                 }
@@ -60,6 +82,8 @@ void Player::tick() {
             tracker.processReferee(reader.getReferee());
     }
 
-    if(reader.isEof())
-        std::cout << "End of file reached!" << std::endl;
+    if(reader.isEof()) {
+        std::cout << "[Player] End of file reached!" << std::endl;
+        timer->stop();
+    }
 }

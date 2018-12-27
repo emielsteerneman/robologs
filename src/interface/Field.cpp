@@ -21,15 +21,15 @@ void Field::setGameState(const GameState* gameState) {
 void Field::paintEvent(QPaintEvent *event) {
 //    std::cout <<"[Field] paintEvent" << std::endl;
 
-    if(this->gameState == nullptr)
-        return;
-
     QPainter painter(this);
 
     painter.setBrush(QBrush(Qt::black));
     painter.drawRect(0, 0, this->width(), this->height());
 
     drawField(painter);
+
+    if(this->gameState == nullptr)
+        return;
 
     painter.setPen(QPen(Qt::white, 0));
     painter.setBrush(QBrush(Qt::red));

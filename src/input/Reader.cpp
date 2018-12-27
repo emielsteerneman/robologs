@@ -69,6 +69,9 @@ void Reader::reset(){
 
     in.clear();
     in.seekg(0, std::ios::beg);
+
+    dataHeader = {};
+
     readHeader();
 
     packetsRead = 0;

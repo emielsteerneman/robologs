@@ -14,6 +14,8 @@ How would this work?
 #include <QObject>
 #include <QTimer>
 #include <QThread>
+#include <QtWidgets/QStyle>
+#include <QDesktopWidget>
 
 #include "Robologs.h"
 #include "input/Reader.h"
@@ -37,7 +39,7 @@ int Robologs::start(int argc, char* argv[]) {
     QApplication app(argc, argv);
 
     Interface* interface = new Interface();
-    interface->setWindowState(Qt::WindowMaximized);
+    interface->move((QApplication::desktop()->width() - interface->width()) / 2, (QApplication::desktop()->height() - interface->height()) / 2);
     interface->show();
 
     Player* player = new Player();
@@ -48,6 +50,8 @@ int Robologs::start(int argc, char* argv[]) {
 
     connect(player, SIGNAL(signalGameState(const GameState*)), interface, SLOT(updateGameState(const GameState*)), Qt::BlockingQueuedConnection);
     connect(player, SIGNAL(signalGameInfo(const GameInfo*)), interface, SLOT(setGameInfo(const GameInfo*)), Qt::BlockingQueuedConnection);
+
+    connect(interface, SIGNAL(signalProgress(double)), player, SLOT(findProgress(double)), Qt::BlockingQueuedConnection);
 
     emit start();
 
