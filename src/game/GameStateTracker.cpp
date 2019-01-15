@@ -147,6 +147,8 @@ bool GameStateTracker::processVision(const SSL_DetectionFrame& packet){
                 worldBot.y = packetBot.y();
                 worldBot.y_buf.put(worldBot.y);
 
+                worldBot.rot = packetBot.orientation();
+
                 worldBot.last_seen = gameState.timestamp;
             }
         }
@@ -178,6 +180,8 @@ bool GameStateTracker::processVision(const SSL_DetectionFrame& packet){
 
                 worldBot.y = packetBot.y();
                 worldBot.y_buf.put(worldBot.y);
+
+                worldBot.rot = packetBot.orientation();
 
                 worldBot.last_seen = gameState.timestamp;
             }

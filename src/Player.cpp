@@ -17,7 +17,8 @@ void Player::start() {
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(tick()));
     timer->setInterval(1000/60);
-    tracker.setHz(20);
+//    timer->setInterval(1);
+    tracker.setHz(30);
     timer->start();
 }
 
@@ -50,9 +51,10 @@ void Player::findProgress(double progress){
 
 void Player::findTimestamp(double timestamp){
     std::cout << "[Player] going to timestamp " << u::timeToString(timestamp) << std::endl;
-    std::cout << " at " << u::timeToString(reader.getDataHeader().timestamp / 1000000000) << std::endl;
+//    std::cout << " at " << u::timeToString(reader.getDataHeader().timestamp / 1000000000) << std::endl;
     timer->stop();
     reader.reset();
+
 
     std::cout << "[Player] searching.. " << std::endl;
     while(!reader.isEof() && (reader.getDataHeader().timestamp / 1000000000) < timestamp)
@@ -74,7 +76,7 @@ void Player::tick() {
             const SSL_WrapperPacket packet = reader.getVision();
             if (packet.has_detection())
                 if (tracker.processVision(packet.detection())) {
-                    std::cout << " at " << u::timeToString(reader.getDataHeader().timestamp / 1000000000) << std::endl;
+//                    std::cout << " at " << u::timeToString(reader.getDataHeader().timestamp / 1000000000) << std::endl;
                     emit signalGameState(tracker.get());
                     nextStateReached = true;
                 }

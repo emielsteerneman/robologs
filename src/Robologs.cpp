@@ -33,8 +33,31 @@ Robologs::Robologs() : QObject(){
     std::cout << "[Robologs] New Robologs constructed" << std::endl;
 }
 
-int Robologs::start(int argc, char* argv[]) {
-    std::cout << "[Robologs] Starting" << std::endl;
+int Robologs::startWriter(int argc, char* argv[]) {
+    std::cout << "[Robologs] writer" << std::endl;
+    QApplication app(argc, argv);
+
+    Writer* writer = new Writer("/home/emiel/Desktop/testWriterOutput.json");
+
+    Player* player = new Player();
+    QThread *thread = new QThread(this);
+    player->moveToThread(thread);
+    connect(this, SIGNAL(start()), player, SLOT(start()));
+    thread->start();
+
+    connect(player, SIGNAL(signalGameState(const GameState*)), writer, SLOT(write(const GameState*)), Qt::BlockingQueuedConnection);
+
+    emit start();
+
+    int result = app.exec();
+    return result;
+}
+
+
+
+
+int Robologs::startInterface(int argc, char* argv[]) {
+    std::cout << "[Robologs] Starting interface" << std::endl;
 
     QApplication app(argc, argv);
 
@@ -59,15 +82,13 @@ int Robologs::start(int argc, char* argv[]) {
     return result;
 }
 
-void Robologs::test(){
-    std::cout << "[Robologs] Test triggered!" << std::endl;
-}
 
 int main(int argc, char* argv[]) {
 
     Robologs robologs;
 
-    return robologs.start(argc, argv);
+//    return robologs.startWriter(argc, argv);
+    return robologs.startInterface(argc, argv);
 
 
 //    std::string started_at = u::timeToString(tracker.getInfo().t_start);

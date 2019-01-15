@@ -48,6 +48,15 @@ public:
 
         return total;
     }
+    float avgVel() const {
+        // First result is buffer[bufferAt]
+        // Last result is buffer[bufferAt-1]
+
+        int prev = bufferAt - 1;
+        if(prev < 0) prev += CIRCULAR_BUFFER_SIZE;
+        float distance = buffer[prev] - buffer[bufferAt];
+        return distance / CIRCULAR_BUFFER_SIZE;
+    }
 };
 
 struct Robot {

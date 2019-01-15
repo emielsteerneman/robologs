@@ -8,6 +8,7 @@
 
 #include "Field.h"
 #include <iostream>
+#include <math.h>
 
 Field::Field(QWidget *parent) : QWidget(parent) {
     std::cout << "[Field] New field created" << std::endl;
@@ -36,14 +37,36 @@ void Field::paintEvent(QPaintEvent *event) {
     for(const Robot& robot : gameState->yellow.robots){
         int x = (int)(this->width() * (robot.x_buf.avg() + 6000) / 12000);
         int y = (int)(this->height()* (robot.y_buf.avg() + 4500) / 9000);
+
+        double xVel = robot.x_buf.avgVel();
+        double yVel = robot.y_buf.avgVel();
+
+        double xRot = std::cos(robot.rot) * 20;
+        double yRot = std::sin(robot.rot) * 20;
+
         painter.drawEllipse(x, y, 10, 10);
+//        painter.drawLine(x+5, y+5, x+5 + xVel, y+5);
+//        painter.drawLine(x+5, y+5, x+5, y+5 + yVel);
+
+        painter.drawLine(x+5, y+5, x+5 + xRot, y+5 + yRot);
     }
 
     painter.setBrush(QBrush(Qt::blue));
     for(const Robot& robot : gameState->blue.robots){
         int x = (int)(this->width() * (robot.x_buf.avg() + 6000) / 12000);
         int y = (int)(this->height()* (robot.y_buf.avg() + 4500) / 9000);
+
+        double xVel = robot.x_buf.avgVel();
+        double yVel = robot.y_buf.avgVel();
+
+        double xRot = std::cos(robot.rot) * 20;
+        double yRot = std::sin(robot.rot) * 20;
+
         painter.drawEllipse(x, y, 10, 10);
+//        painter.drawLine(x+5, y+5, x+5 + xVel, y+5);
+//        painter.drawLine(x+5, y+5, x+5, y+5 + yVel);
+
+        painter.drawLine(x+5, y+5, x+5 + xRot, y+5 + yRot);
     }
 
     painter.setBrush(QBrush(Qt::white));
@@ -74,3 +97,14 @@ void Field::drawField(QPainter& painter){
 
     painter.drawLine(HalfHorizontalTop, HalfHorizontalBottom);
 }
+
+
+
+
+
+
+
+
+
+
+

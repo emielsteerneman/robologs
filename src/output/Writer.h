@@ -7,17 +7,22 @@
 
 #include "game/GameStateTracker.h"
 #include <fstream>
+#include <QWidget>
 
-class Writer {
+class Writer : public QWidget {
+Q_OBJECT
     std::string filename;
     std::ofstream out;
     bool isFirst = true;
+    int nFrames = 0;
 
 public:
     Writer(std::string filename);
     ~Writer();
-    void write(const GameState& gameState);
-    std::string gameStateToJson(const GameState& gameState);
+    std::string gameStateToJson(const GameState* gameState);
+
+public slots:
+    void write(const GameState* gameState);
 
 };
 
