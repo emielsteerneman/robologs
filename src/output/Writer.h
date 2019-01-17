@@ -15,6 +15,7 @@ Q_OBJECT
     std::ofstream out;
     bool isFirst = true;
     int nFrames = 0;
+    int nFramesTotal = 0;
 
 public:
     Writer(std::string filename);

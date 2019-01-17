@@ -3,21 +3,22 @@
 #include "Player.h"
 #include "Utilities.h"
 
-Player::Player() : QObject(){
-    std::cout << "[Player] New player created" << std::endl;
+Player::Player(std::string filename) : filename(filename), QObject(){
+    std::cout << "[Player] New player created for file " << filename << std::endl;
 }
 
 void Player::start() {
     std::cout << "[Player] Starting player" << std::endl;
 
-    reader.openFile("../../2018-06-20_21-21_TIGERs_Mannheim-vs-CMμs.log");
+//    reader.openFile("../../2018-06-20_21-21_TIGERs_Mannheim-vs-CMμs.log");
+    reader.openFile(filename);
 
     getInfo();
 
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(tick()));
-    timer->setInterval(1000/60);
-//    timer->setInterval(1);
+//    timer->setInterval(1000/60);
+    timer->setInterval(1);
     tracker.setHz(30);
     timer->start();
 }

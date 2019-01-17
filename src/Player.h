@@ -11,7 +11,7 @@
 class Player : public QObject {
 Q_OBJECT
 public:
-    explicit Player();
+    explicit Player(std::string filename);
 
 signals:
     void signalGameState(const GameState* gameState);
@@ -24,6 +24,7 @@ public slots:
     void findTimestamp(double timestamp);
 
 private:
+    std::string filename;
     QTimer *timer;
     Reader reader;
     GameInfoTracker infoTracker;

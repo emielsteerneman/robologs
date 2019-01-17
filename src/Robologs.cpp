@@ -37,9 +37,13 @@ int Robologs::startWriter(int argc, char* argv[]) {
     std::cout << "[Robologs] writer" << std::endl;
     QApplication app(argc, argv);
 
-    Writer* writer = new Writer("/home/emiel/Desktop/testWriterOutput.json");
+    std::string file = "2018-06-18_09-06_ZJUNlict-vs-UMass_Minutebots.log";
+    std::string fileIn = "/media/emiel/HDD500/robocup_logs/" + file;
+    std::string fileOut = "/home/emiel/Desktop/AML/" + file;
 
-    Player* player = new Player();
+    Writer* writer = new Writer(fileOut);
+
+    Player* player = new Player(fileIn);
     QThread *thread = new QThread(this);
     player->moveToThread(thread);
     connect(this, SIGNAL(start()), player, SLOT(start()));
@@ -65,7 +69,10 @@ int Robologs::startInterface(int argc, char* argv[]) {
     interface->move((QApplication::desktop()->width() - interface->width()) / 2, (QApplication::desktop()->height() - interface->height()) / 2);
     interface->show();
 
-    Player* player = new Player();
+    std::string file = "2018-06-20_11-18_TIGERs_Mannheim-vs-ER-Force.log";
+    std::string fileIn = "/media/emiel/HDD500/robocup_logs/" + file;
+
+    Player* player = new Player(fileIn);
     QThread *thread = new QThread(this);
     player->moveToThread(thread);
     connect(this, SIGNAL(start()), player, SLOT(start()));
@@ -87,8 +94,8 @@ int main(int argc, char* argv[]) {
 
     Robologs robologs;
 
-//    return robologs.startWriter(argc, argv);
-    return robologs.startInterface(argc, argv);
+    return robologs.startWriter(argc, argv);
+//    return robologs.startInterface(argc, argv);
 
 
 //    std::string started_at = u::timeToString(tracker.getInfo().t_start);
