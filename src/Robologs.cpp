@@ -26,6 +26,18 @@ How would this work?
 #include "output/Writer.h"
 
 
+std::string getFileName(const std::string& s) {
+
+    char sep = '/';
+
+    size_t i = s.rfind(sep, s.length());
+    if (i != std::string::npos) {
+        return(s.substr(i+1, s.length() - i));
+    }
+
+    return("");
+}
+
 int fps = 60;
 int nStates = 1000;
 
@@ -37,13 +49,19 @@ int Robologs::startWriter(int argc, char* argv[]) {
     std::cout << "[Robologs] writer" << std::endl;
     QApplication app(argc, argv);
 
-    std::string file = "2018-06-19_16-35_RoboDragons-vs-RoboTeam_Twente.log";
+
+
+
+//    std::string file = "2018-06-19_16-35_RoboDragons-vs-RoboTeam_Twente.log";
 //    std::string fileIn = "/media/emiel/HDD500/robocup_logs/" + file;
-    std::string fileIn = "/media/emiel/HDD640/personal/projects/robologs/" + file;
-    std::string fileOut = "/home/emiel/Desktop/AML/" + file;
-    fileOut = fileOut.substr(0, fileOut.find_last_of('.')) + ".json";
+//    std::string fileIn = "/media/emiel/HDD640/personal/projects/robologs/" + file;
+//    std::string fileOut = "/home/emiel/Desktop/AML/" + file;
+//    fileOut = fileOut.substr(0, fileOut.find_last_of('.')) + ".json";
 
-
+    std::string fileIn = argv[1];
+    std::string filename = getFileName(fileIn);
+    std::string fileOut = "/home/emiel/Desktop/AML/" + filename;
+    std::cout << "Writing file to " << fileOut << std::endl;
 
     Writer* writer = new Writer(fileOut);
 
@@ -109,103 +127,16 @@ int Robologs::startInterface(int argc, char* argv[]) {
 
 int main(int argc, char* argv[]) {
 
+    if(argc < 2) {
+        std::cout << "Required filename not given. Terminating." << std::endl;
+        return 0;
+    }
+    std::cout << argv[1] << std::endl;
+    std::cout << getFileName(argv[1]) << std::endl;
+
     Robologs robologs;
 
     return robologs.startWriter(argc, argv);
-//    return robologs.startInterface(argc, argv);
-
-
-//    std::string started_at = u::timeToString(tracker.getInfo().t_start);
-//    std::string stopped_at = u::timeToString(tracker.getInfo().t_stop);
-//    std::string game_duration = u::durationToString(tracker.getInfo().t_duration);
-//
-//    /* Process */
-//    const std::chrono::steady_clock::time_point begin_real = std::chrono::steady_clock::now();
-//
-//    tracker.tick();
-//    int iStates = 0;
-//    for(iStates = 0; (nStates <= 0 || iStates < nStates) && !reader.isEof(); iStates++){
-//        tracker.tick();
-////        writer.write(tracker.get());
-//
-//        try{
-////            drawer.drawGameState(tracker.get());
-//        }catch(const std::exception& e){
-//            std::cout << "Drawer exception caught!" << std::endl;
-//            std::cout << e.what() << std::endl;
-//        }
-//
-//    }
-//    const std::chrono::steady_clock::time_point end_real = std::chrono::steady_clock::now();
-//    const clock_t end_cpu = clock();
-//
-//    /* Log */
-//    const double duration_real = (std::chrono::duration_cast<std::chrono::microseconds>(end_real - begin_real).count()) / 1000000.0;
-//
-//    const GameInfo& info = tracker.getInfo();
-//
-//    std::cout << std::setprecision(2) << std::fixed << std::endl;
-//    std::cout << "Duration real    = " << duration_real << std::endl;
-//    std::cout << "Start of log     = " << started_at << std::endl;
-//    std::cout << "End of log       = " << stopped_at << std::endl;
-//    std::cout << "Duration of log  = " << game_duration << std::endl;
-//    std::cout << "Packets parsed   = " << tracker.getInfo().nPackets << std::endl;
-//
-//    std::cout << "Packets:" << std::endl;
-//    std::cout << "Total    = " << info.nPackets          << " (" << info.pps << "/s)" << std::endl;
-//    std::cout << "Referee  = " << info.referee_nPackets  << " (" << info.referee_pps << "/s)" << std::endl;
-//    std::cout << "Vision   = " << info.vision_nPackets   << " (" << info.vision_pps << "/s)" << std::endl;
-//    std::cout << "Geometry = " << info.geometry_nPackets << " (" << info.geometry_pps << "/s)" << std::endl;
-//    std::cout << "Invalid  = " << info.invalid_nPackets  << " (" << info.invalid_pps << "/s)" << std::endl;
-//
-//    std::cout << "\nTerminating" << std::endl;
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
