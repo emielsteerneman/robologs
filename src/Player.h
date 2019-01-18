@@ -8,8 +8,7 @@
 #include "game/GameInfoTracker.h"
 #include "game/GameStateTracker.h"
 
-class Player : public QObject {
-Q_OBJECT
+class Player {
 public:
     explicit Player(std::string filename);
 
@@ -17,7 +16,7 @@ signals:
     void signalGameState(const GameState* gameState);
     void signalGameInfo(const GameInfo* gameInfo);
 
-public slots:
+public:
     void start();
     void tick();
     void findProgress(double progress);

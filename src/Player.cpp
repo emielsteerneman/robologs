@@ -3,7 +3,7 @@
 #include "Player.h"
 #include "Utilities.h"
 
-Player::Player(std::string filename) : filename(filename), QObject(){
+Player::Player(std::string filename) : filename(filename) {
     std::cout << "[Player] New player created for file " << filename << std::endl;
 }
 
@@ -15,12 +15,12 @@ void Player::start() {
 
     getInfo();
 
-    timer = new QTimer(this);
-    connect(timer, SIGNAL(timeout()), this, SLOT(tick()));
+//    timer = new QTimer(this);
+//    connect(timer, SIGNAL(timeout()), this, SLOT(tick()));
 //    timer->setInterval(1000/60);
-    timer->setInterval(1);
-    tracker.setHz(30);
-    timer->start();
+//    timer->setInterval(1);
+//    tracker.setHz(30);
+//    timer->start();
 }
 
 void Player::getInfo(){
@@ -43,7 +43,7 @@ void Player::getInfo(){
     std::cout << "[Player] Game Info created" << std::endl;
     reader.reset();
 
-    emit signalGameInfo(infoTracker.get());
+//    emit signalGameInfo(infoTracker.get());
 }
 
 void Player::findProgress(double progress){
@@ -82,7 +82,7 @@ void Player::tick() {
             if (packet.has_detection())
                 if (tracker.processVision(packet.detection())) {
 //                    std::cout << " at " << u::timeToString(reader.getDataHeader().timestamp / 1000000000) << std::endl;
-                    emit signalGameState(tracker.get());
+//                    emit signalGameState(tracker.get());
                     nextStateReached = true;
                 }
         } else if (type == MessageType::MESSAGE_SSL_REFBOX_2013)

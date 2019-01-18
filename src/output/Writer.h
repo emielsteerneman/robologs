@@ -9,8 +9,7 @@
 #include <fstream>
 #include <QWidget>
 
-class Writer : public QWidget {
-Q_OBJECT
+class Writer {
     std::string filename;
     std::ofstream out;
     bool isFirst = true;
@@ -22,8 +21,6 @@ public:
     ~Writer();
     std::string gameStateToJson(const GameState* gameState);
     void endJSON();
-
-public slots:
     void write(const GameState* gameState);
 
 };

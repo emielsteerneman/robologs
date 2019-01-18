@@ -14,10 +14,7 @@ Writer::Writer(std::string filename) : filename(filename){
     out = std::ofstream(filename, std::ios_base::out);
 
     out << "[\n";
-}
-
-Writer::~Writer(){
-    out << "]\n";
+    out.close();
 }
 
 void Writer::write(const GameState* gameState){

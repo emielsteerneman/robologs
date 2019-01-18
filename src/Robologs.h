@@ -9,15 +9,11 @@
 #include "game/GameStateTracker.h"
 #include "interface/Interface.h"
 
-class Robologs : public QObject {
-    Q_OBJECT
+class Robologs {
 
 public:
     explicit Robologs();
-    int startInterface(int argc, char* argv[]);
     int startWriter(int argc, char* argv[]);
-
-signals:
     void start();
 
 };
