@@ -14,7 +14,6 @@ Writer::Writer(std::string filename) : filename(filename){
     out = std::ofstream(filename, std::ios_base::out);
 
     out << "[\n";
-    out.close();
 }
 
 void Writer::write(const GameState* gameState){
@@ -46,6 +45,7 @@ void Writer::write(const GameState* gameState){
 
 void Writer::endJSON() {
     out << "]" << std::endl;
+    out.close();
 }
 
 
