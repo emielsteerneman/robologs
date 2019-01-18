@@ -21,6 +21,7 @@ public:
     Writer(std::string filename);
     ~Writer();
     std::string gameStateToJson(const GameState* gameState);
+    void endJSON();
 
 public slots:
     void write(const GameState* gameState);

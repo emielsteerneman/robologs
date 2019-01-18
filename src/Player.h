@@ -22,15 +22,13 @@ public slots:
     void tick();
     void findProgress(double progress);
     void findTimestamp(double timestamp);
-
-private:
+public:
+    void getInfo();
     std::string filename;
     QTimer *timer;
     Reader reader;
     GameInfoTracker infoTracker;
     GameStateTracker tracker;
-
-    void getInfo();
 };
 
 

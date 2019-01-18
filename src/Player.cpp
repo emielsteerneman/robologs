@@ -25,6 +25,10 @@ void Player::start() {
 
 void Player::getInfo(){
     std::cout << "[Player] Creating Game Info" << std::endl;
+
+    if(!reader.isOpen())
+        reader.openFile(filename);
+
     reader.reset();
 
     while(!reader.isEof()){
@@ -87,6 +91,6 @@ void Player::tick() {
 
     if(reader.isEof()) {
         std::cout << "[Player] End of file reached!" << std::endl;
-        timer->stop();
+//        timer->stop();
     }
 }

@@ -37,24 +37,41 @@ int Robologs::startWriter(int argc, char* argv[]) {
     std::cout << "[Robologs] writer" << std::endl;
     QApplication app(argc, argv);
 
-    std::string file = "2018-06-18_09-06_ZJUNlict-vs-UMass_Minutebots.log";
-    std::string fileIn = "/media/emiel/HDD500/robocup_logs/" + file;
+    std::string file = "2018-06-19_16-35_RoboDragons-vs-RoboTeam_Twente.log";
+//    std::string fileIn = "/media/emiel/HDD500/robocup_logs/" + file;
+    std::string fileIn = "/media/emiel/HDD640/personal/projects/robologs/" + file;
     std::string fileOut = "/home/emiel/Desktop/AML/" + file;
+    fileOut = fileOut.substr(0, fileOut.find_last_of('.')) + ".json";
+
+
 
     Writer* writer = new Writer(fileOut);
 
     Player* player = new Player(fileIn);
-    QThread *thread = new QThread(this);
-    player->moveToThread(thread);
-    connect(this, SIGNAL(start()), player, SLOT(start()));
-    thread->start();
+    player->getInfo();
+    player->tracker.setHz(30);
 
-    connect(player, SIGNAL(signalGameState(const GameState*)), writer, SLOT(write(const GameState*)), Qt::BlockingQueuedConnection);
+    while(!player->reader.isEof()) {
+        player->tick();
+        writer->write(player->tracker.get());
+    }
+    writer->endJSON();
+    writer->close();
+    std::cout << "DONE WITH WRITING FILE!" << std::endl;
 
-    emit start();
+//    QThread *thread = new QThread(this);
+//    player->moveToThread(thread);
+//    connect(this, SIGNAL(start()), player, SLOT(start()));
+//    thread->start();
 
-    int result = app.exec();
-    return result;
+//    connect(player, SIGNAL(signalGameState(const GameState*)), writer, SLOT(write(const GameState*)), Qt::BlockingQueuedConnection);
+//
+//    emit start();
+//
+//    int result = app.exec();
+//    return result;
+
+    return 0;
 }
 
 

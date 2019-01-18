@@ -23,27 +23,34 @@ Writer::~Writer(){
 void Writer::write(const GameState* gameState){
     nFramesTotal++;
 
-    if(gameState->yellow.robots.size() != 8 || gameState->blue.robots.size() != 8) {
+//    if(gameState->yellow.robots.size() != 8 || gameState->blue.robots.size() != 8) {
 //        std::cout << "[Writer] Invalid amount of robots : yellow=" << gameState->yellow.robots.size() << ", blue=" << gameState->blue.robots.size() << std::endl;
-        return;
+//        return;
+//    }
+
+
+
+    if(gameState->stage == "NORMAL_FIRST_HALF") {
+        if (gameState->command == "NORMAL_START"
+            || gameState->command == "DIRECT_FREE_YELLOW"
+            || gameState->command == "INDIRECT_FREE_YELLOW"
+            || gameState->command == "DIRECT_FREE_BLUE"
+            || gameState->command == "INDIRECT_FREE_BLUE"
+                ) {
+            out << gameStateToJson(gameState);
+            nFrames++;
+
+//            std::cout << gameState->command << " | " << gameState->stage << std::endl;
+            if (nFrames % 100 == 0)
+                std::cout << "[Writer] Frame " << nFrames << "/" << nFramesTotal << " written" << std::endl;
+        }
     }
-
-    if(gameState->command == "NORMAL_START"
-    || gameState->command == "DIRECT_FREE_YELLOW"
-    || gameState->command == "INDIRECT_FREE_YELLOW"
-    || gameState->command == "DIRECT_FREE_BLUE"
-    || gameState->command == "INDIRECT_FREE_BLUE"
-    ){
-        out << gameStateToJson(gameState);
-        nFrames++;
-
-//        std::cout << gameState->command << " | " << gameState->stage << std::endl;
-        if(nFrames % 100 == 0)
-            std::cout << "[Writer] Frame " << nFrames << "/" << nFramesTotal << " written" << std::endl;
-    }
-
-
 }
+
+void Writer::endJSON() {
+    out << "]" << std::endl;
+}
+
 
 std::string Writer::gameStateToJson(const GameState* gameState){
     std::stringstream out;
@@ -70,11 +77,11 @@ std::string Writer::gameStateToJson(const GameState* gameState){
         out << " \"robot_id\" : " << robot.id;
         out << ",\"x\" : "        << robot.x / scaleX;
         out << ",\"x_vel\" : "    << robot.x_buf.avgVel();
-        out << ",\"x_rot\" : "    << std::cos(robot.rot);
+        out << ",\"x_orien\" : "    << std::cos(robot.rot);
         out << ",\"y\" : "        << robot.y / scaleY;
         out << ",\"y_vel\" : "    << robot.y_buf.avgVel();
-        out << ",\"y_rot\" : "    << std::sin(robot.rot);
-        out << ",\"orientation\" : " << robot.rot;
+        out << ",\"y_orien\" : "    << std::sin(robot.rot);
+//        out << ",\"orientation\" : " << robot.rot;
         out << "}";
     }
     out << "]";
@@ -88,11 +95,11 @@ std::string Writer::gameStateToJson(const GameState* gameState){
         out << " \"robot_id\" : " << robot.id;
         out << ",\"x\" : "        << robot.x / scaleX;
         out << ",\"x_vel\" : "    << robot.x_buf.avgVel();
-        out << ",\"x_rot\" : "    << std::cos(robot.rot);
+        out << ",\"x_orien\" : "    << std::cos(robot.rot);
         out << ",\"y\" : "        << robot.y / scaleY;
         out << ",\"y_vel\" : "    << robot.y_buf.avgVel();
-        out << ",\"y_rot\" : "    << std::sin(robot.rot);
-        out << ",\"orientation\" : " << robot.rot;
+        out << ",\"y_orien\" : "    << std::sin(robot.rot);
+//        out << ",\"orientation\" : " << robot.rot;
         out << "}";
     }
     out << "]";
