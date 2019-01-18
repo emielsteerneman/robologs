@@ -62,6 +62,7 @@ int Robologs::startWriter(int argc, char* argv[]) {
 
     std::string fileIn = argv[1];
     std::string filename = getFileName(fileIn);
+    filename = filename.substr(0, filename.find_last_of('.')) + ".json";
     std::string fileOut = "/home/emiel/Desktop/AML/" + filename;
     std::cout << "Writing file to " << fileOut << std::endl;
 
