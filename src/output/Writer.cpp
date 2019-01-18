@@ -33,12 +33,28 @@ void Writer::write(const GameState* gameState){
             || gameState->command == "DIRECT_FREE_BLUE"
             || gameState->command == "INDIRECT_FREE_BLUE"
                 ) {
+
+            if(inBreak){
+                if(!isFirstBlock)
+                    out << ", \n\n";
+                out << "[";
+                inBreak = false;
+            }
+
             out << gameStateToJson(gameState);
             nFrames++;
 
 //            std::cout << gameState->command << " | " << gameState->stage << std::endl;
             if (nFrames % 100 == 0)
                 std::cout << "[Writer] Frame " << nFrames << "/" << nFramesTotal << " written" << std::endl;
+        }else{
+            if(!inBreak) {
+                // Close block, start new block
+                out << "]";
+                isFirstBlock = false;
+                isFirstGamestate = true;
+                inBreak = true;
+            }
         }
     }
 }
@@ -56,9 +72,9 @@ std::string Writer::gameStateToJson(const GameState* gameState){
     float scaleY = 4500;
 
     out << std::setprecision(10) << std::fixed;
-    if(!isFirst)
+    if(!isFirstGamestate)
         out << ",";
-    isFirst = false;
+    isFirstGamestate = false;
 
     out << "{";
     out << " \"timestamp\" :" << gameState->timestamp;
@@ -73,10 +89,10 @@ std::string Writer::gameStateToJson(const GameState* gameState){
         out << "{";
         out << " \"robot_id\" : " << robot.id;
         out << ",\"x\" : "        << robot.x / scaleX;
-        out << ",\"x_vel\" : "    << robot.x_buf.avgVel();
+        out << ",\"x_vel\" : "    << robot.x_buf.avgVel() / scaleX;
         out << ",\"x_orien\" : "    << std::cos(robot.rot);
         out << ",\"y\" : "        << robot.y / scaleY;
-        out << ",\"y_vel\" : "    << robot.y_buf.avgVel();
+        out << ",\"y_vel\" : "    << robot.y_buf.avgVel() / scaleY;
         out << ",\"y_orien\" : "    << std::sin(robot.rot);
 //        out << ",\"orientation\" : " << robot.rot;
         out << "}";
@@ -91,10 +107,10 @@ std::string Writer::gameStateToJson(const GameState* gameState){
         out << "{";
         out << " \"robot_id\" : " << robot.id;
         out << ",\"x\" : "        << robot.x / scaleX;
-        out << ",\"x_vel\" : "    << robot.x_buf.avgVel();
+        out << ",\"x_vel\" : "    << robot.x_buf.avgVel() / scaleX;
         out << ",\"x_orien\" : "    << std::cos(robot.rot);
         out << ",\"y\" : "        << robot.y / scaleY;
-        out << ",\"y_vel\" : "    << robot.y_buf.avgVel();
+        out << ",\"y_vel\" : "    << robot.y_buf.avgVel() / scaleY;
         out << ",\"y_orien\" : "    << std::sin(robot.rot);
 //        out << ",\"orientation\" : " << robot.rot;
         out << "}";

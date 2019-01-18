@@ -12,7 +12,9 @@
 class Writer {
     std::string filename;
     std::ofstream out;
-    bool isFirst = true;
+    bool inBreak = true;
+    bool isFirstBlock = true;
+    bool isFirstGamestate = true;
     int nFrames = 0;
     int nFramesTotal = 0;
 
