@@ -60,10 +60,12 @@ int Robologs::startWriter(int argc, char* argv[]) {
 //    std::string fileOut = "/home/emiel/Desktop/AML/" + file;
 //    fileOut = fileOut.substr(0, fileOut.find_last_of('.')) + ".json";
 
+//    std::string fileIn = "/home/selina/Desktop/AML/Project/logs/logfiles/2019-07-03_14-09_ER-Force-vs-TIGERs_Mannheim.log.gz";
+
     std::string fileIn = argv[1];
     std::string filename = getFileName(fileIn);
     filename = filename.substr(0, filename.find_last_of('.')) + ".json";
-    std::string fileOut = "/home/emiel/Desktop/AML/" + filename;
+    std::string fileOut = "/home/selina/Desktop/AML/Project/logs/logfiles/" + filename;
     std::cout << "Writing file to " << fileOut << std::endl;
 
     Writer* writer = new Writer(fileOut);

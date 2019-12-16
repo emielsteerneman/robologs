@@ -32,13 +32,31 @@ void Player::getInfo(){
     reader.reset();
 
     while(!reader.isEof()){
+//        std::cout << "[Player] Tick!" << std::endl;
         int type = reader.next();
         infoTracker.process(reader.getDataHeader());
 
-        if (type == MessageType::MESSAGE_SSL_VISION_2010)
+        if (type == MessageType::MESSAGE_SSL_VISION_2010) {
             infoTracker.process(reader.getVision());
-        if (type == MessageType::MESSAGE_SSL_REFBOX_2013)
+            std::cout << "[Player] MESSAGE_SSL_VISION_2010 detected" << std::endl;
+        }
+        else if (type == MessageType::MESSAGE_SSL_REFBOX_2013) {
             infoTracker.process(reader.getReferee());
+            std::cout << "[Player] MESSAGE_SSL_REFBOX_2013 detected" << std::endl;
+        }
+        else if (type == MessageType::MESSAGE_SSL_VISION_2014) {
+            infoTracker.process(reader.getVision());
+            std::cout << "[Player] MESSAGE_SSL_VISION_2014 detected" << std::endl;
+        }
+        else if(type == MessageType::MESSAGE_INVALID)
+            std::cout << "[Player] MESSAGE_INVALID detected" << std::endl;
+        else if(type == MessageType::MESSAGE_UNKNOWN)
+            std::cout << "[Player] MESSAGE_UNKNOWN detected" << std::endl;
+        else if(type == MessageType::MESSAGE_BLANK)
+            std::cout << "[Player] MESSAGE_BLANK detected" << std::endl;
+        else
+            std::cout << "[Player] Unknown message type detected" << std::endl;
+
     }
     std::cout << "[Player] Game Info created" << std::endl;
     reader.reset();

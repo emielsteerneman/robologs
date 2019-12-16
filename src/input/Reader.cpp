@@ -84,13 +84,15 @@ int Reader::next(){
         return FILE_CLOSED;
     }
 
+    // Read the Data Header of the packet
+    in.read((char*) &dataHeader, sizeof(dataHeader));
+
     if(in.eof()){
         std::cout << "[Reader] EOF reached. Nothing more to read." << std::endl;
         return END_OF_FILE;
     }
 
-    // Read the Data Header of the packet
-    in.read((char*) &dataHeader, sizeof(dataHeader));
+
     // Log data is stored big endian, convert to host byte order
     dataHeader.timestamp = be64toh(dataHeader.timestamp);
     dataHeader.messageType = be32toh(dataHeader.messageType);
@@ -101,6 +103,7 @@ int Reader::next(){
 
     /* === data to object === */
     int type = dataHeader.messageType;
+
     /* Parse Referee message */
     if(type == MESSAGE_SSL_REFBOX_2013){
         if (refereePacket.ParseFromArray(data, dataHeader.messageSize)) {
@@ -113,6 +116,17 @@ int Reader::next(){
 
     /* Parse Vision or Geometry message */
     if(type == MESSAGE_SSL_VISION_2010) {
+        if(wrapperPacket.ParseFromArray(data, dataHeader.messageSize)){
+            if(wrapperPacket.has_detection()){
+                return type;
+            }
+        }else{
+            std::cout << "[Reader] Warning! Could not parse vision packet" << std::endl;
+            return MESSAGE_INVALID;
+        }
+    }
+
+    if(type == MESSAGE_SSL_VISION_2014) {
         if(wrapperPacket.ParseFromArray(data, dataHeader.messageSize)){
             if(wrapperPacket.has_detection()){
                 return type;
