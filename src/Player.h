@@ -10,7 +10,7 @@
 
 class Player {
 public:
-    explicit Player(std::string filename);
+    explicit Player(const std::string& filename);
 
 signals:
     void signalGameState(const GameState* gameState);
@@ -22,7 +22,8 @@ public:
     void findProgress(double progress);
     void findTimestamp(double timestamp);
 public:
-    void getInfo();
+    bool reset();
+    bool getInfo();
     std::string filename;
     QTimer *timer;
     Reader reader;

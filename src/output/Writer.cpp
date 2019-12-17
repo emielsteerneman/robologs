@@ -9,7 +9,7 @@
 #include <math.h>
 
 Writer::Writer(std::string filename) : filename(filename){
-    std::cout << "Created Writer. filename=" << filename << std::endl;
+    std::cout << "[Writer] Created Writer. filename=" << filename << std::endl;
 
     out = std::ofstream(filename, std::ios_base::out);
 
@@ -27,12 +27,12 @@ void Writer::write(const GameState* gameState){
 
 
     if(gameState->stage == "NORMAL_FIRST_HALF") {
-        if (gameState->command == "NORMAL_START"
-            || gameState->command == "DIRECT_FREE_YELLOW"
-            || gameState->command == "INDIRECT_FREE_YELLOW"
-            || gameState->command == "DIRECT_FREE_BLUE"
-            || gameState->command == "INDIRECT_FREE_BLUE"
-                ) {
+        if(gameState->command == "NORMAL_START"
+        || gameState->command == "DIRECT_FREE_YELLOW"
+        || gameState->command == "INDIRECT_FREE_YELLOW"
+        || gameState->command == "DIRECT_FREE_BLUE"
+        || gameState->command == "INDIRECT_FREE_BLUE"
+        ) {
 
             if(inBreak){
                 if(!isFirstBlock)

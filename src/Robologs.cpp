@@ -16,7 +16,9 @@ How would this work?
 #include <QThread>
 #include <QtWidgets/QStyle>
 #include <QDesktopWidget>
+#include <unistd.h>
 
+#include "output/ASCII.h"
 #include "Robologs.h"
 #include "input/Reader.h"
 #include "game/GameStateTracker.h"
@@ -27,59 +29,61 @@ How would this work?
 
 
 std::string getFileName(const std::string& s) {
-
     char sep = '/';
-
+    // Find the last / in the string
     size_t i = s.rfind(sep, s.length());
+    // If / is found, return everything after it
     if (i != std::string::npos) {
         return(s.substr(i+1, s.length() - i));
     }
-
     return("");
 }
 
-int fps = 60;
-int nStates = 1000;
+//int fps = 60;
+//int nStates = 1000;
 
 Robologs::Robologs(){
     std::cout << "[Robologs] New Robologs constructed" << std::endl;
 }
 
 int Robologs::startWriter(int argc, char* argv[]) {
-    std::cout << "[Robologs] writer" << std::endl;
 
+    // Input file
+    std::string fileIn = "/home/emiel/Desktop/projects/robologs/logs/2019-07-03_14-09_ER-Force-vs-TIGERs_Mannheim.log";
+    // Output file, replace extension with .json
+    std::string fileOut = fileIn.substr(0, fileIn.find_last_of('.')) + ".json";
+    std::cout << "[RoboLogs][startWriter] Writing file to " << fileOut << std::endl;
 
-//    QApplication app(argc, argv);
-
-
-
-
-//    std::string file = "2018-06-19_16-35_RoboDragons-vs-RoboTeam_Twente.log";
-//    std::string fileIn = "/media/emiel/HDD500/robocup_logs/" + file;
-//    std::string fileIn = "/media/emiel/HDD640/personal/projects/robologs/" + file;
-//    std::string fileOut = "/home/emiel/Desktop/AML/" + file;
-//    fileOut = fileOut.substr(0, fileOut.find_last_of('.')) + ".json";
-
-//    std::string fileIn = "/home/selina/Desktop/AML/Project/logs/logfiles/2019-07-03_14-09_ER-Force-vs-TIGERs_Mannheim.log.gz";
-
-    std::string fileIn = argv[1];
-    std::string filename = getFileName(fileIn);
-    filename = filename.substr(0, filename.find_last_of('.')) + ".json";
-    std::string fileOut = "/home/selina/Desktop/AML/Project/logs/logfiles/" + filename;
-    std::cout << "Writing file to " << fileOut << std::endl;
-
-    Writer* writer = new Writer(fileOut);
-
-    Player* player = new Player(fileIn);
-    player->getInfo();
-    player->tracker.setHz(30);
-
-    while(!player->reader.isEof()) {
-        player->tick();
-        writer->write(player->tracker.get());
+    Reader reader;
+    if(!reader.openFile(fileIn)){
+        std::cout << "[RoboLogs][startWriter] Reader could not open file! aborting.." << std::endl;
+        return 1;
     }
-    writer->endJSON();
-    std::cout << "DONE WITH WRITING FILE!" << std::endl;
+    GameStateTracker tracker;
+    tracker.setReader(&reader);
+//    Writer writer(fileOut);
+
+    for(int i = 0; i < 1000000; i++){
+        tracker.tick();
+        std::cout << ASCII::GamestateToString(tracker.get(), 48, 36) << std::endl;
+        usleep(30 * 1e3);
+    }
+
+    return 0;
+
+//    Player* player = new Player(fileIn);
+
+//    if(!player->getInfo())
+//        std::cout << "[RoboLogs] Could not get info from player" << std::endl;
+
+//    player->tracker.setHz(30);
+//    player->reset();
+//    while(!player->reader.isEof()) {
+//        player->tick();
+//        writer.write(player->tracker.get());
+//    }
+//    writer.endJSON();
+//    std::cout << "[RoboLogs][startWriter] Done writing file" << std::endl;
 
 //    QThread *thread = new QThread(this);
 //    player->moveToThread(thread);
@@ -93,7 +97,7 @@ int Robologs::startWriter(int argc, char* argv[]) {
 //    int result = app.exec();
 //    return result;
 
-    return 0;
+//    return 0;
 }
 
 
@@ -131,12 +135,12 @@ int Robologs::startWriter(int argc, char* argv[]) {
 
 int main(int argc, char* argv[]) {
 
-    if(argc < 2) {
-        std::cout << "Required filename not given. Terminating." << std::endl;
-        return 0;
-    }
-    std::cout << argv[1] << std::endl;
-    std::cout << getFileName(argv[1]) << std::endl;
+//    if(argc < 2) {
+//        std::cout << "Required filename not given. Terminating." << std::endl;
+//        return 0;
+//    }
+//    std::cout << argv[1] << std::endl;
+//    std::cout << getFileName(argv[1]) << std::endl;
 
     Robologs robologs;
 

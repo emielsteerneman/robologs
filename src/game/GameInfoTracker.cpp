@@ -13,9 +13,11 @@ GameInfoTracker::GameInfoTracker() {
 }
 
 void GameInfoTracker::reset() {
-    std::cout << "[GIT] Resetting" << std::endl;
+    std::cout << "[GIT][reset] Resetting" << std::endl;
     gameInfo = {};
     isInitial = true;
+    lastCommand = "";
+    lastState = "";
 }
 
 const GameInfo* GameInfoTracker::get(){

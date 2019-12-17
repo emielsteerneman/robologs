@@ -26,7 +26,7 @@ add_executable(robologs
         interface/Field.cpp
         interface/Timeline.cpp
         interface/Timeline.h
-        Utilities.cpp)
+        Utilities.cpp output/ASCII.cpp output/ASCII.h)
 target_link_libraries(robologs protobuf ${OpenCV_LIBS} Qt5::Widgets Qt5::Gui)
 
 #add_executable(ui Interface.cpp)

@@ -7,56 +7,76 @@
 
 #include "GameStateTracker.h"
 
-GameStateTracker::GameStateTracker() {
+GameStateTracker::GameStateTracker(){
+    std::cout << "[GIT] New GameStateTracker created" << std::endl;
     reset();
 }
 
-const GameState* GameStateTracker::get() {
-    return &gameState;
+const GameState& GameStateTracker::get() {
+    return gameState;
 }
 
-void GameStateTracker::setInput(Reader *reader) {
-    this->reader = reader;
+void GameStateTracker::setReader(Reader *_reader) {
+    reader = _reader;
 }
 
-void GameStateTracker::setHz(int hz) {
-    this->hz = hz;
+void GameStateTracker::setHz(int _hz) {
+    hz = _hz;
+    std::cout << "[GST][setHz] World set to " << hz << "hz" << std::endl;
 }
 
 void GameStateTracker::reset(){
+    std::cout << "[GST][reset] Resetting" << std::endl;
     gameState = {};
     gameState.isInitial = true;
+    lastInterval = 0.;
+    nextInterval = 0.;
 }
 
 /* Processes all packets within the next interval and accumulates data in the gameState */
 bool GameStateTracker::tick() {
-    if(reader->isEof())
+    if(reader == nullptr){
+        std::cout << "[GST][tick] Reader not set" << std::endl;
         return false;
+    }
+
+    if(reader->isEof()){
+        std::cout << "[GST][tick] EOF reached" << std::endl;
+        return false;
+    }
 
     /* If the recordingState is on skipping, process referee packages until the recordingState is on recording */
     while(!reader->isEof() && recordingState == RecordingState::SKIPPING) {
         gameState.isInitial = true;
         if (reader->next() == MESSAGE_SSL_REFBOX_2013)
-            if (refereePacket.ParseFromArray(reader->getData(), reader->getDataHeader().messageSize))
-                processReferee(refereePacket);
+                processReferee(reader->getReferee());
     }
 
-    /* If the gameState is in it initial state, set it to the first vision packet */
+    /* If the gameState is in its initial state, set it to the first vision packet in the log file */
     if(gameState.isInitial){
+        std::cout << "[GST][tick] Searching for initial state.." << std::endl;
+        int packetsNow = reader->packetsRead;
         while(!reader->isEof()){ // While there are packets
-            if(reader->next() == MESSAGE_SSL_VISION_2010    // If wrapper packet
-            && wrapperPacket.ParseFromArray(reader->getData(), reader->getDataHeader().messageSize) // If parsed successfully
-            && wrapperPacket.has_detection()                // If it has vision data
-            && 1 < wrapperPacket.detection().t_capture()){ // If t_capture isn't 0 (first packet has that for some reason)
-                gameState.isInitial = false;
-                lastInterval = wrapperPacket.detection().t_capture();
-                break;
+            // Read next packet
+            int messageType = reader->next();
+            // If the last packet was a vision packet
+            if(messageType == MESSAGE_SSL_VISION_2010 || messageType == MESSAGE_SSL_VISION_2014){
+                // If the last packet has vision data (not just geometry)
+                if(reader->getVision().has_detection()) {
+                    // If t_capture isn't 0 (first packet has that for some reason)
+                    if (1 < reader->getVision().detection().t_capture()) {
+                        gameState.isInitial = false;
+                        lastInterval = reader->getVision().detection().t_capture();
+                        break;
+                    }
+                }
             }
         }
+        std::cout << "[GST][tick] Initial state found after " << (reader->packetsRead - packetsNow) << " packets" << std::endl;
     }
 
     if(reader->isEof()){
-        std::cout << "[GST][tick][initial] EOF reached" << std::endl;
+        std::cout << "[GST][tick] EOF reached" << std::endl;
         return false;
     }
 
@@ -65,45 +85,44 @@ bool GameStateTracker::tick() {
     double nextInterval = lastInterval + interval;
     bool intervalReached = false;
 
-    int iParsed = 0;
-    int iSafeguard = 2 * 480 / hz; // Set safeguard to 2 * number of expected packets
 
+    int nPackets = 0;
+    // Safeguard to prevent infinite while loops. Set to 2 * number of expected packets
+    int iSafeguard = 20 * 480 / hz;
+
+    // While there are still packed and the next interval has not been reached
     while(!reader->isEof() && !intervalReached){
-
-        int type = reader->next(); // Read next packet
+        // Read next packet
+        int type = reader->next();
 
         /* Parse Referee message */
-        if(type == MESSAGE_SSL_REFBOX_2013){
-            if (refereePacket.ParseFromArray(reader->getData(), reader->getDataHeader().messageSize)) {
-                processReferee(refereePacket);
-            } else {
-                std::cout << "[GST] Warning! Could not parse referee packet" << std::endl;
-            }
-        }
+        if(type == MESSAGE_SSL_REFBOX_2013)
+            processReferee(reader->getReferee());
 
         /* Parse Vision or Geometry message */
-        if(type == MESSAGE_SSL_VISION_2010) {
-            if(wrapperPacket.ParseFromArray(reader->getData(), reader->getDataHeader().messageSize)){
-                if(wrapperPacket.has_detection()){
-                    processVision(wrapperPacket.detection());
-                }
-            }else{
-                std::cout << "[GST][tick] Warning! Could not parse vision packet" << std::endl;
-            }
+        if(type == MESSAGE_SSL_VISION_2010 || type == MESSAGE_SSL_VISION_2014) {
+            if (reader->getVision().has_detection())
+                processVision(reader->getVision().detection());
         }
 
-        intervalReached = nextInterval < gameState.timestamp || iSafeguard < iParsed;
-        if(iSafeguard < iParsed)
-            std::cout << "[GST][tick] Warning! Safeguard overflow!" << std::endl;
+        nPackets++;
 
+        intervalReached = nextInterval < gameState.timestamp || iSafeguard < nPackets;
+        if(iSafeguard < nPackets) {
+            std::cout << "[GST][tick] Safeguard overflow! Breaking out after " << nPackets << " packets" << std::endl;
+            std::cout << "[GST][tick] Safeguard overflow!     Next interval : " << nextInterval << std::endl;
+            std::cout << "[GST][tick] Safeguard overflow! Current timestamp : " << gameState.timestamp << std::endl;
+            break;
+        }
     }
-
+//    std::cout << "[GST][tick] Packets read for next interval : " << nPackets << std::endl;
     lastInterval = nextInterval;
     return true;
 }
 
 bool GameStateTracker::processVision(const SSL_DetectionFrame& packet){
-    // Todo don't need both lastInterval and nextInterval
+//    std::cout << "[GST][pV]" << std::endl;
+//    Todo don't need both lastInterval and nextInterval
 
     // Sanity check on Hz. Should be non-negative
     if(hz < 1){
@@ -121,31 +140,34 @@ bool GameStateTracker::processVision(const SSL_DetectionFrame& packet){
         gameState.isInitial = false;
     }
 
-    std::cout << std::setprecision(12) << std::fixed;
+//    std::cout << std::setprecision(12) << std::fixed;
 //    std::cout << "[GST][pV] Currently at  = " << gameState.timestamp << std::endl;
 //    std::cout << "[GST][pV] Next interval = " << nextInterval << std::endl;
 
     // Two brackets simply for folding code
     {
     /* Yellow Team */
+    // For each detected robot
     for(const SSL_DetectionRobot& packetBot : packet.robots_yellow()){
+
+        // Check if the robot is already in the world
         bool found = false;
         for(Robot& worldBot : gameState.yellow.robots)
             if(worldBot.id == packetBot.robot_id())
                 found = true;
-
+        // If the robot is not yet in the world, add it
         if(!found){
             gameState.yellow.robots.emplace_back(Robot());
             gameState.yellow.robots.back().id = packetBot.robot_id();
         }
-
+        // For each robot currently in the world
         for(Robot& worldBot : gameState.yellow.robots){
-            if(worldBot.id == packetBot.robot_id()){
-                worldBot.x = packetBot.x();
-                worldBot.x_buf.put(worldBot.x);
+            if(worldBot.id == packetBot.robot_id()){    // If it is the robot in the detection packet
+                worldBot.x = packetBot.x();         // set x-position
+                worldBot.x_buf.put(worldBot.x);     // update circular buffer
 
-                worldBot.y = packetBot.y();
-                worldBot.y_buf.put(worldBot.y);
+                worldBot.y = packetBot.y();         // set y-position
+                worldBot.y_buf.put(worldBot.y);     // update circular buffer
 
                 worldBot.rot = packetBot.orientation();
 
@@ -154,6 +176,7 @@ bool GameStateTracker::processVision(const SSL_DetectionFrame& packet){
         }
     }
 
+    // Remove all yellow robots that have been out of view for more than a second
     for (auto it = gameState.yellow.robots.begin(); it != gameState.yellow.robots.end(); /* NOTHING */){
         if (1 < gameState.timestamp - (*it).last_seen) {
             it = gameState.yellow.robots.erase(it);

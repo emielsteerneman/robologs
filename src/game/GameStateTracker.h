@@ -5,7 +5,7 @@
 #include "input/Reader.h"
 #include <vector>
 #include <tuple>
-#include <time.h>
+#include <ctime>
 #include <iostream>
 #include <iomanip>
 
@@ -97,7 +97,6 @@ struct GameState {
 
     Team yellow;
     Team blue;
-//    std::vector<Ball> balls;
     Ball ball;
 };
 
@@ -108,22 +107,22 @@ class GameStateTracker {
     SSL_Referee refereePacket;
     GameState gameState;
 
-    int hz; // Hz at which the game should update
+    int hz = 30; // Hz at which the game should update
 
     double lastInterval = 0; // Timestamp of the last interval. Used to provide consistent FPS
     double nextInterval = 0;
 
 public:
 
-    Reader* reader;
+    Reader* reader = nullptr;
     RecordingState recordingState = RecordingState::RECORDING;
     int parsed = 0;
 
     GameStateTracker();
 
-    const GameState* get();
+    const GameState& get();
 
-    void setInput(Reader *reader);
+    void setReader(Reader *reader);
     void setHz(int);
 
     void reset();
