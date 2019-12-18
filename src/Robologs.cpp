@@ -60,50 +60,27 @@ int Robologs::startWriter(int argc, char* argv[]) {
         return 1;
     }
     GameStateTracker tracker;
+    tracker.setHz(30); // <- step size of the world. Max = 60Hz, because SSL-vision runs at 60Hz.
     tracker.setReader(&reader);
-//    Writer writer(fileOut);
+    Writer writer(fileOut);
 
-    for(int i = 0; i < 1000000; i++){
+    while(!reader.isEof()){
         tracker.tick();
+        writer.write(&tracker.get());
         std::cout << ASCII::GamestateToString(tracker.get(), 48, 36) << std::endl;
         usleep(30 * 1e3);
     }
 
+    writer.endJSON();
+
     return 0;
 
-//    Player* player = new Player(fileIn);
-
-//    if(!player->getInfo())
-//        std::cout << "[RoboLogs] Could not get info from player" << std::endl;
-
-//    player->tracker.setHz(30);
-//    player->reset();
-//    while(!player->reader.isEof()) {
-//        player->tick();
-//        writer.write(player->tracker.get());
-//    }
-//    writer.endJSON();
-//    std::cout << "[RoboLogs][startWriter] Done writing file" << std::endl;
-
-//    QThread *thread = new QThread(this);
-//    player->moveToThread(thread);
-//    connect(this, SIGNAL(start()), player, SLOT(start()));
-//    thread->start();
-
-//    connect(player, SIGNAL(signalGameState(const GameState*)), writer, SLOT(write(const GameState*)), Qt::BlockingQueuedConnection);
-//
-//    emit start();
-//
-//    int result = app.exec();
-//    return result;
-
-//    return 0;
 }
 
 
 
 
-//int Robologs::startInterface(int argc, char* argv[]) {
+int Robologs::startInterface(int argc, char* argv[]) {
 //    std::cout << "[Robologs] Starting interface" << std::endl;
 //
 //    QApplication app(argc, argv);
@@ -112,8 +89,8 @@ int Robologs::startWriter(int argc, char* argv[]) {
 //    interface->move((QApplication::desktop()->width() - interface->width()) / 2, (QApplication::desktop()->height() - interface->height()) / 2);
 //    interface->show();
 //
-//    std::string file = "2018-06-20_11-18_TIGERs_Mannheim-vs-ER-Force.log";
-//    std::string fileIn = "/media/emiel/HDD500/robocup_logs/" + file;
+//    std::string fileIn = "/home/emiel/Desktop/projects/robologs/logs/2019-07-03_14-09_ER-Force-vs-TIGERs_Mannheim.log";
+//
 //
 //    Player* player = new Player(fileIn);
 //    QThread *thread = new QThread(this);
@@ -130,7 +107,8 @@ int Robologs::startWriter(int argc, char* argv[]) {
 //
 //    int result = app.exec();
 //    return result;
-//}
+    return 0;
+}
 
 
 int main(int argc, char* argv[]) {
@@ -148,3 +126,28 @@ int main(int argc, char* argv[]) {
 
 }
 
+//int Robologs::start(int argc, char* argv[]) {
+//    std::cout << "[Robologs] Starting" << std::endl;
+//
+//    QApplication app(argc, argv);
+//
+//    Interface* interface = new Interface();
+//    interface->move((QApplication::desktop()->width() - interface->width()) / 2, (QApplication::desktop()->height() - interface->height()) / 2);
+//    interface->show();
+//
+//    Player* player = new Player();
+//    QThread *thread = new QThread(this);
+//    player->moveToThread(thread);
+//    connect(this, SIGNAL(start()), player, SLOT(start()));
+//    thread->start();
+//
+//    connect(player, SIGNAL(signalGameState(const GameState*)), interface, SLOT(updateGameState(const GameState*)), Qt::BlockingQueuedConnection);
+//    connect(player, SIGNAL(signalGameInfo(const GameInfo*)), interface, SLOT(setGameInfo(const GameInfo*)), Qt::BlockingQueuedConnection);
+//
+//    connect(interface, SIGNAL(signalProgress(double)), player, SLOT(findProgress(double)), Qt::BlockingQueuedConnection);
+//
+//    emit start();
+//
+//    int result = app.exec();
+//    return result;
+//}

@@ -8,7 +8,8 @@
 #include "game/GameInfoTracker.h"
 #include "game/GameStateTracker.h"
 
-class Player {
+class Player : public QObject {
+Q_OBJECT
 public:
     explicit Player(const std::string& filename);
 

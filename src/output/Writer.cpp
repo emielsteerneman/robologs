@@ -16,6 +16,11 @@ Writer::Writer(std::string filename) : filename(filename){
     out << "[\n";
 }
 
+Writer::~Writer() {
+    out.flush();
+    out.close();
+}
+
 void Writer::write(const GameState* gameState){
     nFramesTotal++;
 
@@ -23,8 +28,6 @@ void Writer::write(const GameState* gameState){
 //        std::cout << "[Writer] Invalid amount of robots : yellow=" << gameState->yellow.robots.size() << ", blue=" << gameState->blue.robots.size() << std::endl;
 //        return;
 //    }
-
-
 
     if(gameState->stage == "NORMAL_FIRST_HALF") {
         if(gameState->command == "NORMAL_START"
@@ -35,6 +38,7 @@ void Writer::write(const GameState* gameState){
         ) {
 
             if(inBreak){
+                std::cout << "[Writer][write] Switched to " << gameState->stage << " | " << gameState->command << ", opening block." << std::endl;
                 if(!isFirstBlock)
                     out << ", \n\n";
                 out << "[";
@@ -44,11 +48,11 @@ void Writer::write(const GameState* gameState){
             out << gameStateToJson(gameState);
             nFrames++;
 
-//            std::cout << gameState->command << " | " << gameState->stage << std::endl;
             if (nFrames % 100 == 0)
                 std::cout << "[Writer] Frame " << nFrames << "/" << nFramesTotal << " written" << std::endl;
         }else{
             if(!inBreak) {
+                std::cout << "[Writer][write] Switched to " << gameState->stage << " | " << gameState->command << ", closing block." << std::endl;
                 // Close block, start new block
                 out << "]";
                 isFirstBlock = false;

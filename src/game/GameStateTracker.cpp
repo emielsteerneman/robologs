@@ -144,8 +144,8 @@ bool GameStateTracker::processVision(const SSL_DetectionFrame& packet){
 //    std::cout << "[GST][pV] Currently at  = " << gameState.timestamp << std::endl;
 //    std::cout << "[GST][pV] Next interval = " << nextInterval << std::endl;
 
-    // Two brackets simply for folding code
-    {
+
+    { // Two brackets simply for folding code
     /* Yellow Team */
     // For each detected robot
     for(const SSL_DetectionRobot& packetBot : packet.robots_yellow()){
@@ -226,7 +226,8 @@ bool GameStateTracker::processVision(const SSL_DetectionFrame& packet){
         gameState.ball.y = packet.balls(0).y();
         gameState.ball.y_buf.put(gameState.ball.y);
     }
-    }
+
+    } // Two brackets simply for folding code
 
     // Check if interval has been reached
     if(nextInterval <= gameState.timestamp){
@@ -248,10 +249,16 @@ void GameStateTracker::processReferee(const SSL_Referee& packet){
         SSL_Referee_Command cmd = packet.command();
         gameState.command = SSL_Referee_Command_Name(cmd);
 
-        if(cmd == SSL_Referee_Command_HALT)
-            recordingState =  RecordingState::SKIPPING;
-        else
+        if(cmd == SSL_Referee_Command_HALT) {
+            if(recordingState != RecordingState::SKIPPING)
+                std::cout << "[GST][pR] HALT state detected. Skipping.." << std::endl;
+            recordingState = RecordingState::SKIPPING;
+        }
+        else{
+            if(recordingState != RecordingState::RECORDING)
+                std::cout << "[GST][pR] HALT state over. Recording.." << std::endl;
             recordingState = RecordingState::RECORDING;
+        }
     }
 
     gameState.yellow.name = packet.yellow().name();
