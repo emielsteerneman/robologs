@@ -36,7 +36,7 @@ enum MessageType
 };
 
 class Reader {
-
+private:
     std::ifstream in;       // File stream used to read the file
     FileHeader fileHeader;  // FileHeader from the file most recently opened
     DataHeader dataHeader;  // DataHeader from the packet most recently read

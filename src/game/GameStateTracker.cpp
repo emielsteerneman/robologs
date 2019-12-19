@@ -1,13 +1,8 @@
-#include <stdio.h>
 #include <iostream>
-#include <iomanip>
-#include <iostream>
-
-#include <opencv2/opencv.hpp>
 
 #include "GameStateTracker.h"
 
-GameStateTracker::GameStateTracker(){
+GameStateTracker::GameStateTracker(Reader& _reader) : reader(_reader){
     std::cout << "[GIT] New GameStateTracker created" << std::endl;
     reset();
 }
@@ -16,8 +11,8 @@ const GameState& GameStateTracker::get() {
     return gameState;
 }
 
-void GameStateTracker::setReader(Reader *_reader) {
-    reader = _reader;
+int GameStateTracker::getHz(){
+    return hz;
 }
 
 void GameStateTracker::setHz(int _hz) {
@@ -31,51 +26,48 @@ void GameStateTracker::reset(){
     gameState.isInitial = true;
     lastInterval = 0.;
     nextInterval = 0.;
+    reader.reset();
 }
 
 /* Processes all packets within the next interval and accumulates data in the gameState */
 bool GameStateTracker::tick() {
-    if(reader == nullptr){
-        std::cout << "[GST][tick] Reader not set" << std::endl;
-        return false;
-    }
 
-    if(reader->isEof()){
+    if(reader.isEof()){
         std::cout << "[GST][tick] EOF reached" << std::endl;
         return false;
     }
 
     /* If the recordingState is on skipping, process referee packages until the recordingState is on recording */
-    while(!reader->isEof() && recordingState == RecordingState::SKIPPING) {
+    while(!reader.isEof() && recordingState == RecordingState::SKIPPING) {
         gameState.isInitial = true;
-        if (reader->next() == MESSAGE_SSL_REFBOX_2013)
-                processReferee(reader->getReferee());
+        if (reader.next() == MESSAGE_SSL_REFBOX_2013)
+                processReferee(reader.getReferee());
     }
 
     /* If the gameState is in its initial state, set it to the first vision packet in the log file */
     if(gameState.isInitial){
         std::cout << "[GST][tick] Searching for initial state.." << std::endl;
-        int packetsNow = reader->packetsRead;
-        while(!reader->isEof()){ // While there are packets
+        int packetsNow = reader.packetsRead;
+        while(!reader.isEof()){ // While there are packets
             // Read next packet
-            int messageType = reader->next();
+            int messageType = reader.next();
             // If the last packet was a vision packet
             if(messageType == MESSAGE_SSL_VISION_2010 || messageType == MESSAGE_SSL_VISION_2014){
                 // If the last packet has vision data (not just geometry)
-                if(reader->getVision().has_detection()) {
+                if(reader.getVision().has_detection()) {
                     // If t_capture isn't 0 (first packet has that for some reason)
-                    if (1 < reader->getVision().detection().t_capture()) {
+                    if (1 < reader.getVision().detection().t_capture()) {
                         gameState.isInitial = false;
-                        lastInterval = reader->getVision().detection().t_capture();
+                        lastInterval = reader.getVision().detection().t_capture();
                         break;
                     }
                 }
             }
         }
-        std::cout << "[GST][tick] Initial state found after " << (reader->packetsRead - packetsNow) << " packets" << std::endl;
+        std::cout << "[GST][tick] Initial state found after " << (reader.packetsRead - packetsNow) << " packets" << std::endl;
     }
 
-    if(reader->isEof()){
+    if(reader.isEof()){
         std::cout << "[GST][tick] EOF reached" << std::endl;
         return false;
     }
@@ -91,18 +83,18 @@ bool GameStateTracker::tick() {
     int iSafeguard = 20 * 480 / hz;
 
     // While there are still packed and the next interval has not been reached
-    while(!reader->isEof() && !intervalReached){
+    while(!reader.isEof() && !intervalReached){
         // Read next packet
-        int type = reader->next();
+        int type = reader.next();
 
         /* Parse Referee message */
         if(type == MESSAGE_SSL_REFBOX_2013)
-            processReferee(reader->getReferee());
+            processReferee(reader.getReferee());
 
         /* Parse Vision or Geometry message */
         if(type == MESSAGE_SSL_VISION_2010 || type == MESSAGE_SSL_VISION_2014) {
-            if (reader->getVision().has_detection())
-                processVision(reader->getVision().detection());
+            if (reader.getVision().has_detection())
+                processVision(reader.getVision().detection());
         }
 
         nPackets++;
@@ -231,7 +223,6 @@ bool GameStateTracker::processVision(const SSL_DetectionFrame& packet){
 
     // Check if interval has been reached
     if(nextInterval <= gameState.timestamp){
-//        std::cout << "[GST][pV] Interval reached" << std::endl;
         lastInterval = nextInterval;
         nextInterval = lastInterval + 1.0 / hz;
         return true;

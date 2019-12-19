@@ -15,9 +15,12 @@ class Robologs  : public QObject {
 public:
     explicit Robologs();
     int startWriter(int argc, char* argv[]);
-    void start();
 
     int startInterface(int argc, char **argv);
+
+signals:
+    void start();
+
 };
 
 #endif //ROBOLOGS_ROBOLOGS_H

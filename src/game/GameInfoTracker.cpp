@@ -7,7 +7,7 @@
 #include <vector>
 #include <tuple>
 
-GameInfoTracker::GameInfoTracker() {
+GameInfoTracker::GameInfoTracker(Reader& _reader) : reader(_reader){
     std::cout << "[GIT] New GameInfoTracker created" << std::endl;
     reset();
 }
@@ -16,8 +16,35 @@ void GameInfoTracker::reset() {
     std::cout << "[GIT][reset] Resetting" << std::endl;
     gameInfo = {};
     isInitial = true;
-    lastCommand = "";
-    lastState = "";
+}
+
+bool GameInfoTracker::initTimeline(){
+    reset();
+
+    if(!reader.reset()){
+        std::cout << "[GIT][initTimeline] Could not reset reader" << std::endl;
+        return false;
+    }
+
+    while(!reader.isEof()){
+        int type = reader.next();
+        /* Pass Dataheader */
+        process(reader.getDataHeader());
+        /* Parse Referee message */
+        if(type == MESSAGE_SSL_REFBOX_2013)
+            process(reader.getReferee());
+        /* Parse Vision or Geometry message */
+        if(type == MESSAGE_SSL_VISION_2010 || type == MESSAGE_SSL_VISION_2014)
+            process(reader.getVision());
+    }
+
+    if(!reader.reset()){
+        std::cout << "[GIT][initTimeline] Could not reset reader" << std::endl;
+        return false;
+    }
+
+    std::cout << "[GIT][initTimeline] Timeline created" << std::endl;
+    return true;
 }
 
 const GameInfo* GameInfoTracker::get(){
@@ -31,7 +58,6 @@ void GameInfoTracker::process(const DataHeader& dataHeader){
     }
 
     gameInfo.t_stop = dataHeader.timestamp / 1000000000;
-
 }
 
 void GameInfoTracker::process(const SSL_WrapperPacket& wrapperPacket){
@@ -39,8 +65,6 @@ void GameInfoTracker::process(const SSL_WrapperPacket& wrapperPacket){
         return;
 
     gameInfo.vision_nPackets++;
-
-    const SSL_DetectionFrame& frame = wrapperPacket.detection();
 
 }
 
@@ -75,89 +99,3 @@ std::string GameInfoTracker::getCommand() {
     else
         return std::get<2>(gameInfo.timeline.back());
 }
-
-
-
-
-
-
-//
-//
-//void GameStateTracker::addInfo(){
-//
-//    if(!reader->isOpen()) {
-//        std::cout << "[GST][addInfo] Warning! Reader not ready!" << std::endl;
-//        return;
-//    }
-//
-//    /* Add timeline */
-//    std::string stage;
-//    std::string cmd;
-//
-//    // reset everything
-//    reader->reset();
-//    //Todo reset struct
-//
-//    while(!reader->isEof()){
-//        int type = reader->next();
-//        gameState.gameInfo.nPackets++;
-//
-//        // Referee packet
-//        if(type == MESSAGE_SSL_REFBOX_2013) {
-//            if (refereePacket.ParseFromArray(reader->getData(), reader->getDataHeader().messageSize)) { // Parse packet
-//                // Process referee packet
-//                gameState.gameInfo.referee_nPackets++;
-//                processReferee(refereePacket);
-//                // Add stage/command change to timeline
-//                if (stage != gameState.stage || cmd != gameState.command) {
-//                    stage = gameState.stage;
-//                    cmd = gameState.command;
-//                    double timestamp = reader->getDataHeader().timestamp / 1000000000.0;
-//                    gameState.gameInfo.timeline.emplace_back(timestamp, stage, cmd, recordingState);
-//                }
-//            }else{
-//                gameState.gameInfo.invalid_nPackets++; // Parse failed
-//            }
-//        }else
-//
-//            // Vision packet
-//        if(type == MESSAGE_SSL_VISION_2010){
-//            if (wrapperPacket.ParseFromArray(reader->getData(), reader->getDataHeader().messageSize)) {
-//                if(wrapperPacket.has_detection())
-//                    gameState.gameInfo.vision_nPackets++;
-//                if(wrapperPacket.has_geometry())
-//                    gameState.gameInfo.geometry_nPackets++;
-//            }else{
-//                gameState.gameInfo.invalid_nPackets++; // Parse failed
-//            }
-//        }else
-//
-//            // Weird packet
-//        if(type == MESSAGE_UNKNOWN || type == MESSAGE_BLANK){
-//            gameState.gameInfo.invalid_nPackets++; // Parse failed
-//        }
-//    }
-//
-//    double timestamp = reader->getDataHeader().timestamp / 1000000000.0;
-//    gameState.gameInfo.timeline.emplace_back(timestamp, "END", "END", RecordingState::SKIPPING);
-//
-////    std::cout << std::setprecision(15) << std::endl;
-////    for(std::tuple<double, std::string, std::string> myTuple : gameState.timeline)
-////        std::cout << std::get<0>(myTuple) << "::" << std::get<1>(myTuple) << "::"  << std::get<2>(myTuple) << std::endl;
-//
-//    double t_start = std::get<0>(gameState.gameInfo.timeline.front());
-//    double t_end = std::get<0>(gameState.gameInfo.timeline.back());
-//    double t_duration = t_end - t_start;
-//
-//    gameState.gameInfo.t_start = t_start;
-//    gameState.gameInfo.t_stop = t_end;
-//    gameState.gameInfo.t_duration = t_duration;
-//
-//    gameState.gameInfo.pps          = gameState.gameInfo.nPackets / t_duration;
-//    gameState.gameInfo.referee_pps  = gameState.gameInfo.referee_nPackets  / t_duration;
-//    gameState.gameInfo.vision_pps   = gameState.gameInfo.vision_nPackets   / t_duration;
-//    gameState.gameInfo.geometry_pps = gameState.gameInfo.geometry_nPackets / t_duration;
-//    gameState.gameInfo.invalid_pps  = gameState.gameInfo.invalid_nPackets  / t_duration;
-//
-//    reader->reset();
-//}

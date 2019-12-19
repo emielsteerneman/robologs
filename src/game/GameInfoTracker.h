@@ -16,8 +16,13 @@ struct GameInfo {
 };
 
 class GameInfoTracker {
+private:
+    Reader& reader;
+    GameInfo gameInfo;
+    bool isInitial = true;
+
 public:
-    GameInfoTracker();
+    explicit GameInfoTracker(Reader& _reader);
     const GameInfo* get();
     std::string getStage();
     std::string getCommand();
@@ -28,11 +33,8 @@ public:
 
     void reset();
 
-private:
-    GameInfo gameInfo;
-    bool isInitial;
-    std::string lastCommand;
-    std::string lastState;
+    bool initTimeline();
+
 
 
 };

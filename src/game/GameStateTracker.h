@@ -2,15 +2,16 @@
 #define SSL_LOGTOOLS_GAMESTATETRACKER_H
 
 #define CIRCULAR_BUFFER_SIZE 20
-#include "input/Reader.h"
 #include <vector>
 #include <tuple>
 #include <ctime>
 #include <iostream>
 #include <iomanip>
-
 #include "protobuf/ssl_referee.pb.h"
+
 #include "protobuf/messages_robocup_ssl_wrapper.pb.h"
+
+#include "input/Reader.h"
 
 enum RecordingState {
     INVALID = -1,
@@ -102,27 +103,22 @@ struct GameState {
 
 
 class GameStateTracker {
-
-    SSL_WrapperPacket wrapperPacket;
-    SSL_Referee refereePacket;
+private:
     GameState gameState;
-
+    Reader& reader;
     int hz = 30; // Hz at which the game should update
 
     double lastInterval = 0; // Timestamp of the last interval. Used to provide consistent FPS
     double nextInterval = 0;
 
 public:
-
-    Reader* reader = nullptr;
     RecordingState recordingState = RecordingState::RECORDING;
     int parsed = 0;
 
-    GameStateTracker();
+    explicit GameStateTracker(Reader& _reader);
 
     const GameState& get();
 
-    void setReader(Reader *reader);
     void setHz(int);
 
     void reset();
@@ -131,8 +127,7 @@ public:
     void processReferee(const SSL_Referee& packet);
     bool tick();
 
-    void addInfo();
-
+    int getHz();
 };
 
 #endif //SSL_LOGTOOLS_GAMESTATETRACKER_H

@@ -10,26 +10,30 @@
 
 class Player : public QObject {
 Q_OBJECT
+
+private:
+    GameStateTracker tracker;
+    GameInfoTracker infoTracker;
+    int hz;
+
 public:
-    explicit Player(const std::string& filename);
+    Player(GameStateTracker& tracker, GameInfoTracker& infoTracker, int hz);
+    bool reset();
+    bool getInfo();
+    std::string filename;
+    QTimer *timer;
+
+public slots:
+    void start();
+    void tick();
+    void findProgress(double progress);
+    void findTimestamp(double timestamp);
 
 signals:
     void signalGameState(const GameState* gameState);
     void signalGameInfo(const GameInfo* gameInfo);
 
-public:
-    void start();
-    void tick();
-    void findProgress(double progress);
-    void findTimestamp(double timestamp);
-public:
-    bool reset();
-    bool getInfo();
-    std::string filename;
-    QTimer *timer;
-    Reader reader;
-    GameInfoTracker infoTracker;
-    GameStateTracker tracker;
+
 };
 
 
