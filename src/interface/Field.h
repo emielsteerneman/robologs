@@ -24,8 +24,6 @@ public:
     void paintEvent(QPaintEvent *event) override;
 
     void drawField(QPainter& painter);
-
-
 };
 
 namespace FieldGeometry {
@@ -33,13 +31,18 @@ namespace FieldGeometry {
     const int FieldWidth = 800;
     const int FieldHeight = 600;
 
-    const QPoint FieldTopLeft     = QPoint(0  , 0);
-    const QPoint FieldTopRight    = QPoint(799, 0);
-    const QPoint FieldBottomLeft  = QPoint(0  , 599);
-    const QPoint FieldBottomRight = QPoint(799, 599);
+    const QPoint BorderTopLeft     = QPoint(0  , 0);
+    const QPoint BorderTopRight    = QPoint(669, 0);
+    const QPoint BorderBottomLeft  = QPoint(0  , 519);
+    const QPoint BorderBottomRight = QPoint(669, 519);
 
-    const QPoint PenaltyLeftTopLeft     = QPoint(0  , 220);
-    const QPoint PenaltyLeftTopRight    = QPoint(80 , 220);
+    const QPoint FieldTopLeft     = QPoint(30 , 30);
+    const QPoint FieldTopRight    = QPoint(629, 30);
+    const QPoint FieldBottomLeft  = QPoint(30 , 479);
+    const QPoint FieldBottomRight = QPoint(629, 479);
+
+    const QPoint PenaltyLeftTopLeft     = QPoint(0  , 225);
+    const QPoint PenaltyLeftTopRight    = QPoint(80 , 225);
     const QPoint PenaltyLeftBottomLeft  = QPoint(0  , 380);
     const QPoint PenaltyLeftBottomRight = QPoint(80 , 380);
 

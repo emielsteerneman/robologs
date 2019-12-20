@@ -13,9 +13,9 @@ Interface::Interface(QWidget *parent) : QWidget(parent) {
     std::cout << "[Interface] New interface created" << std::endl;
     std::cout << "[Interface] width=" << this->width() << " height=" << this->height() << std::endl;
 
-    this->setMinimumSize(820, 720);
+    this->setMinimumSize(690, 620);
 
-    this->setStyleSheet("background-color: #333; color: white;");
+    this->setStyleSheet("background-color: rgb(255, 255, 255); color: white;");
 
     lGameCommand = new QLabel(this);
     lGameCommand->setAlignment(Qt::AlignCenter);
@@ -24,7 +24,7 @@ Interface::Interface(QWidget *parent) : QWidget(parent) {
     lTeamYellow = new QLabel(this);
     lTeamYellow->setAlignment(Qt::AlignLeft);
     lTeamYellow->setAttribute(Qt::WA_TranslucentBackground, true);
-    lTeamYellow->setStyleSheet("color: rgb(255, 50, 50);");
+    lTeamYellow->setStyleSheet("color: rgb(255, 196, 0);");
 
     lTeamBlue = new QLabel(this);
     lTeamBlue->setAlignment(Qt::AlignRight);
@@ -43,8 +43,10 @@ Interface::Interface(QWidget *parent) : QWidget(parent) {
 void Interface::resizeEvent(QResizeEvent *event) {
     std::cout << "[Interface][resizeEvent] width=" << this->width() << " height=" << this->height() << std::endl;
 
-    int height = this->height();
-    int width = this->width();
+//    int height = this->height();
+//    int width = this->width();
+
+    int width = 670;
 
     timeline->setGeometry(10, 10, this->width() - 20, 50);
 
