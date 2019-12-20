@@ -5,6 +5,7 @@
 #include <QString>
 #include <QProgressBar>
 #include <QSlider>
+#include <QtWidgets/QLayout>
 
 #include "Interface.h"
 #include "../Utilities.h"
@@ -13,9 +14,7 @@ Interface::Interface(QWidget *parent) : QWidget(parent) {
     std::cout << "[Interface] New interface created" << std::endl;
     std::cout << "[Interface] width=" << this->width() << " height=" << this->height() << std::endl;
 
-    this->setMinimumSize(690, 620);
-
-    this->setStyleSheet("background-color: rgb(255, 255, 255); color: white;");
+    this->setStyleSheet("background-color: rgb(30, 30, 30); color: white;");
 
     lGameCommand = new QLabel(this);
     lGameCommand->setAlignment(Qt::AlignCenter);
@@ -34,7 +33,7 @@ Interface::Interface(QWidget *parent) : QWidget(parent) {
     lStats = new QLabel(this);
     lStats->setStyleSheet("Font : 8pt");
 
-    field = new Field(this);
+    field = new Field(this, 600, 450, 20);
     timeline = new Timeline(this);
 
     connect(timeline, SIGNAL(signalProgress(double)), this, SIGNAL(signalProgress(double)));
@@ -43,21 +42,20 @@ Interface::Interface(QWidget *parent) : QWidget(parent) {
 void Interface::resizeEvent(QResizeEvent *event) {
     std::cout << "[Interface][resizeEvent] width=" << this->width() << " height=" << this->height() << std::endl;
 
-//    int height = this->height();
-//    int width = this->width();
-
-    int width = 670;
-
-    timeline->setGeometry(10, 10, this->width() - 20, 50);
-
-    field->move(std::max((width - field->width()) / 2, 0), 100);
-
-    lGameCommand->setGeometry(field->x(), field->y() - 20, field->width(), 20);
-    lTeamYellow ->setGeometry(field->x(), field->y() - 20, field->width(), 20);
-    lTeamBlue   ->setGeometry(field->x(), field->y() - 20, field->width(), 20);
-
+    // Set timeline to width of field, height of 50px
+    timeline->setGeometry(10, 10, field->width() - 20, 50);
+    // Move text below timeline
+    int textY = timeline->y() + timeline->height() + 10;
+    lGameCommand->setGeometry(10, textY, field->width() - 20, 20);
+    lTeamYellow ->setGeometry(10, textY, field->width() - 20, 20);
+    lTeamBlue   ->setGeometry(10, textY, field->width() - 20, 20);
+    // Move field below text
+    field->move(0, lGameCommand->y() + lGameCommand->height() + 10);
+    // Move stats below field
     lStats->setGeometry(field->x(), field->y() + field->height() + 5, field->width(), 10);
 
+    setFixedHeight(lStats->y() + lStats->height());
+    setFixedWidth(field->width());
 }
 
 void Interface::setGameInfo(const GameInfo* gameInfo){

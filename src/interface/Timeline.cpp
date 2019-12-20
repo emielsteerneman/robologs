@@ -73,7 +73,7 @@ TimelineBackground::TimelineBackground(QWidget* parent) : QWidget(parent){
 }
 
 void TimelineBackground::paintEvent(QPaintEvent *event) {
-    std::cout << "[TimelineBackground] paintEvent" << std::endl;
+//    std::cout << "[TimelineBackground] paintEvent" << std::endl;
     if(gameInfo == nullptr)
         return;
 

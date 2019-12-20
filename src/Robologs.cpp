@@ -50,7 +50,8 @@ int Robologs::startWriter(int argc, char* argv[]) {
     // Input file
 //    std::string fileIn = "/home/emiel/Desktop/projects/robologs/logs/2019-07-03_14-09_ER-Force-vs-TIGERs_Mannheim.log";
 //    std::string fileIn  = "/home/selina/Desktop/AML/Project/logs/logfiles/2019-07-03_14-09_ER-Force-vs-TIGERs_Mannheim.log";
-    std::string fileIn = "/home/selina/Desktop/AML/Project/logs/logfiles/2019-07-06_04-54_ER-Force-vs-TIGERs_Mannheim.log";
+//    std::string fileIn = "/home/selina/Desktop/AML/Project/logs/logfiles/2019-07-06_04-54_ER-Force-vs-TIGERs_Mannheim.log";
+    std::string fileIn = "/home/emiel/Desktop/projects/robologs/logs/2019-07-03_14-09_ER-Force-vs-TIGERs_Mannheim.log";
 //    std::string fileIn = "/home/selina/Desktop/AML/Project/logs/logfiles/2019-07-06_11-32_ER-Force-vs-ZJUNlict.log";
 //    std::string fileIn = "/home/selina/Desktop/AML/Project/logs/logfiles/2019-07-07_05-26_ER-Force-vs-MRL.log";
 //    std::string fileIn = "/home/selina/Desktop/AML/Project/logs/logfiles/2019-07-07_06-34_ER-Force-vs-ZJUNlict.log";
@@ -86,7 +87,8 @@ int Robologs::startInterface(int argc, char* argv[]) {
 
     QApplication app(argc, argv);
 
-    std::string fileIn = "/home/selina/Desktop/AML/Project/logs/logfiles/2019-07-03_14-09_ER-Force-vs-TIGERs_Mannheim.log";
+//    std::string fileIn = "/home/selina/Desktop/AML/Project/logs/logfiles/2019-07-03_14-09_ER-Force-vs-TIGERs_Mannheim.log";
+    std::string fileIn = "/home/emiel/Desktop/projects/robologs/logs/2019-07-03_14-09_ER-Force-vs-TIGERs_Mannheim.log";
 
     /** Create reader **/
     Reader reader;
